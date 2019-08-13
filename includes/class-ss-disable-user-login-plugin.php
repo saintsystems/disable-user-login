@@ -175,7 +175,7 @@ final class SS_Disable_User_Login_Plugin {
 			$disabled = 1;
 		}
 
-		update_user_meta( $user_id, 'disable_user_login', $disabled );
+		update_user_meta( $user_id, '_is_disabled', $disabled );
 	}
 
 	/**
@@ -195,7 +195,7 @@ final class SS_Disable_User_Login_Plugin {
 			return;
 		}
 		// Get user meta
-		$disabled = get_user_meta( $user->ID, 'disable_user_login', true );
+		$disabled = get_user_meta( $user->ID, '_is_disabled', true );
 
 		// Is the use logging in disabled?
 		if ( $disabled == '1' ) {
@@ -220,8 +220,9 @@ final class SS_Disable_User_Login_Plugin {
 	public function user_login_message( $message ) {
 
 		// Show the error message if it seems to be a disabled user
-		if ( isset( $_GET['disabled'] ) && $_GET['disabled'] == 1 )
+		if ( isset( $_GET['disabled'] ) && $_GET['disabled'] == 1 ) {
 			$message =  '<div id="login_error">' . apply_filters( 'disable_user_login_notice', __( 'Account disabled', 'disable_user_login' ) ) . '</div>';
+		}
 
 		return $message;
 	}
@@ -251,7 +252,7 @@ final class SS_Disable_User_Login_Plugin {
 	public function manage_users_column_content( $empty, $column_name, $user_ID ) {
 
 		if ( $column_name == 'disable_user_login' ) {
-			if ( get_the_author_meta( 'disable_user_login', $user_ID )	== 1 ) {
+			if ( get_the_author_meta( '_is_disabled', $user_ID ) == 1 ) {
 				return __( 'Disabled', 'disable-user-login' );
 			}
 		}
@@ -288,7 +289,7 @@ final class SS_Disable_User_Login_Plugin {
 		$disabled = ($doaction === 'disable_user_login') ? 1 : 0;
 
 		foreach ( $user_ids as $user_id ){
-			update_user_meta( $user_id, 'disable_user_login', $disabled );
+			update_user_meta( $user_id, '_is_disabled', $disabled );
 		}
 
 		if ($disabled){
