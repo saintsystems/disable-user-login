@@ -1,0 +1,8 @@
+# osx noise
+.DS_Store
+profile
+includes/woocommerce-mailchimp.sublime-workspace
+release.sh
+# Unit tests
+phpcs.xml.dist
+vendor
