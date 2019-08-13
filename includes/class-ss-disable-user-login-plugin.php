@@ -25,6 +25,13 @@ final class SS_Disable_User_Login_Plugin {
 	private static $instance;
 
 	/**
+	 * The user meta key to use for storing whether the user is disabled.
+	 *
+	 * @var string
+	 */
+	private static $user_meta_key = '_is_disabled';
+
+	/**
 	 * Returns the plugin version
 	 *
 	 * @return string
@@ -148,7 +155,7 @@ final class SS_Disable_User_Login_Plugin {
 						<label for="disable_user_login"><?php _e(' Disable User Account', 'disable_user_login' ); ?></label>
 					</th>
 					<td>
-						<input type="checkbox" name="disable_user_login" id="disable_user_login" value="1" <?php checked( 1, get_the_author_meta( 'disable_user_login', $user->ID ) ); ?> />
+						<input type="checkbox" name="disable_user_login" id="disable_user_login" value="1" <?php checked( 1, get_the_author_meta( self::$user_meta_key, $user->ID ) ); ?> />
 						<span class="description"><?php _e( 'If checked, the user cannot login with this account.' , 'disable_user_login' ); ?></span>
 					</td>
 				</tr>
@@ -175,7 +182,7 @@ final class SS_Disable_User_Login_Plugin {
 			$disabled = 1;
 		}
 
-		update_user_meta( $user_id, '_is_disabled', $disabled );
+		update_user_meta( $user_id, self::$user_meta_key, $disabled );
 	}
 
 	/**
@@ -195,7 +202,7 @@ final class SS_Disable_User_Login_Plugin {
 			return;
 		}
 		// Get user meta
-		$disabled = get_user_meta( $user->ID, '_is_disabled', true );
+		$disabled = get_user_meta( $user->ID, self::$user_meta_key, true );
 
 		// Is the use logging in disabled?
 		if ( $disabled == '1' ) {
@@ -252,7 +259,7 @@ final class SS_Disable_User_Login_Plugin {
 	public function manage_users_column_content( $empty, $column_name, $user_ID ) {
 
 		if ( $column_name == 'disable_user_login' ) {
-			if ( get_the_author_meta( '_is_disabled', $user_ID ) == 1 ) {
+			if ( get_the_author_meta( self::$user_meta_key, $user_ID ) == 1 ) {
 				return __( 'Disabled', 'disable-user-login' );
 			}
 		}
@@ -289,7 +296,7 @@ final class SS_Disable_User_Login_Plugin {
 		$disabled = ($doaction === 'disable_user_login') ? 1 : 0;
 
 		foreach ( $user_ids as $user_id ){
-			update_user_meta( $user_id, '_is_disabled', $disabled );
+			update_user_meta( $user_id, self::$user_meta_key, $disabled );
 		}
 
 		if ($disabled){
