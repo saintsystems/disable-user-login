@@ -5,7 +5,7 @@ Tags: users, user, login, account, disable
 Requires at least: 4.7.0
 Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
