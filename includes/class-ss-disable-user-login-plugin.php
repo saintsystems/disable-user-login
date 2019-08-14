@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.0.1';
+	private static $version = '1.1.0';
 
 	/**
 	 * Plugin singleton instance
@@ -52,7 +52,7 @@ final class SS_Disable_User_Login_Plugin {
 			self::$instance = new SS_Disable_User_Login_Plugin();
 			self::$instance->load_plugin_textdomain();
 			self::$instance->add_hooks();
-			do_action( 'disable_user_login_loaded' );
+			do_action( 'disable_user_login.loaded' );
 
 		}
 
@@ -78,18 +78,28 @@ final class SS_Disable_User_Login_Plugin {
 		add_action( 'edit_user_profile',          array( $this, 'add_disabled_field'          )        );
 		add_action( 'personal_options_update',    array( $this, 'save_disabled_field'         )        );
 		add_action( 'edit_user_profile_update',   array( $this, 'save_disabled_field'         )        );
-		add_action( 'wp_login',                   array( $this, 'user_login'                  ), 10, 2 );
 		add_action( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 10, 3 );
 		add_action( 'admin_footer-users.php',	  array( $this, 'manage_users_css'            )        );
 		add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
 
 		// Filters
-		add_filter( 'login_message',              array( $this, 'user_login_message'          )        );
+		add_filter( 'authenticate',               array( $this, 'user_login'                  ), 1000, 3 );
 		add_filter( 'manage_users_columns',       array( $this, 'manage_users_columns'	      )        );
+		add_filter( 'wpmu_users_columns',         array( $this, 'manage_users_columns'        )        );
 		add_filter( 'bulk_actions-users',         array( $this, 'bulk_action_disable_users'   )        );
 		add_filter( 'handle_bulk_actions-users',  array( $this, 'handle_bulk_disable_users'   ), 10, 3 );
 
 	} //end function add_hooks
+
+	/**
+	 * Gets the capability associated with banning a user
+	 * @return string
+	 */
+	public function get_edit_cap() {
+
+		return is_multisite() ? 'manage_network_users' : 'edit_users';
+
+	} //end function get_edit_cap
 
 	/**
 	 * Load Localization files.
@@ -145,7 +155,7 @@ final class SS_Disable_User_Login_Plugin {
 	public function add_disabled_field( $user ) {
 
 		// Only show this option to users who can delete other users
-		if ( ! current_user_can( 'edit_users' ) )
+		if ( ! current_user_can( $this->get_edit_cap() ) )
 			return;
 		?>
 		<table class="form-table">
@@ -168,12 +178,18 @@ final class SS_Disable_User_Login_Plugin {
 	 * Saves the custom Disabled field to user meta
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param int $user_id
 	 */
 	public function save_disabled_field( $user_id ) {
 
-		// Only worry about saving this field if the user has access
-		if ( ! current_user_can( 'edit_users' ) )
+		// Don't disable super admins.
+		if ( is_multisite() && is_super_admin( $user_id ) ) {
+			return;
+		}
+
+		// Only worry about saving this field if the user has access.
+		if ( ! current_user_can( $this->get_edit_cap() ) )
 			return;
 
 		$disabled = isset( $_POST['disable_user_login'] ) ? 1 : 0;
@@ -185,49 +201,23 @@ final class SS_Disable_User_Login_Plugin {
 	 * After login check to see if user account is disabled
 	 *
 	 * @since 1.0.0
-	 * @param string $user_login
 	 * @param object $user
+	 * @param string $username
+	 * @param string $password
 	 */
-	public function user_login( $user_login, $user = null ) {
+	public function user_login( $user, $username, $password ) {
 
-		if ( ! $user ) {
-			$user = get_user_by( 'login', $user_login );
-		}
-		if ( ! $user ) {
-			// not logged in - definitely not disabled
-			return;
-		}
-		// Get user meta
-		$disabled = get_user_meta( $user->ID, self::$user_meta_key, true );
+		if ( is_a( $user, 'WP_User' ) ) {
+			$disabled = get_user_meta( $user->ID, self::$user_meta_key, true );
 
-		// Is the user logging in disabled?
-		if ( $disabled == '1' ) {
-			// Clear cookies, a.k.a log user out
-			wp_clear_auth_cookie();
-
-			// Build login URL and then redirect
-			$login_url = site_url( 'wp-login.php', 'login' );
-			$login_url = add_query_arg( 'disabled', '1', $login_url );
-			wp_redirect( $login_url );
-			exit;
-		}
-	}
-
-	/**
-	 * Show a notice to users who try to login and are disabled
-	 *
-	 * @since 1.0.0
-	 * @param string $message
-	 * @return string
-	 */
-	public function user_login_message( $message ) {
-
-		// Show the error message if it seems to be a disabled user
-		if ( isset( $_GET['disabled'] ) && $_GET['disabled'] == 1 ) {
-			$message =  '<div id="login_error">' . apply_filters( 'disable_user_login_notice', __( 'Account disabled', 'disable_user_login' ) ) . '</div>';
+			// Is the use logging in disabled?
+			if ( $disabled ) {
+				return new WP_Error( 'disable_user_login_user_disabled', apply_filters( 'disable_user_login.disabled_message', __( '<strong>ERROR</strong>: Account disabled.', 'disable_user_login' ) ) );
+			}
 		}
 
-		return $message;
+		//Pass on any existing errors
+		return $user;
 	}
 
 	/**
