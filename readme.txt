@@ -48,6 +48,9 @@ Yes, there is a filter in place for that, `disable_user_login_notice`.
 
 == Changelog ==
 
+= 1.2.0 =
+* Add action hooks when user accounts are enabled/disabled and when disabled user attempts to login.
+
 = 1.1.0 =
 * Switch to `authenticate` filter for user login.
 * Multisite support.

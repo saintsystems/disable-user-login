@@ -200,25 +200,7 @@ final class SS_Disable_User_Login_Plugin {
 		// Update the user's disabled status
 		update_user_meta( $user_id, self::$user_meta_key, $disabled );
 
-		/**
-		 * Trigger an action when a disabled user's account has been
-		 * enabled.
-		 *
-		 * @since 1.2.0
-		 * @param int $user_id The ID of the user being enabled
-		 */
-		if ( $originally_disabled && $disabled == 0 ) {
-			do_action( 'disable_user_login.user_enabled', $user_id );
-		}
- 		/**
-		 * Trigger an action when a user's account is enabled
-		 *
-		 * @since 1.2.0
-		 * @param int $user_id The ID of the user being disabled
-		 */
-		if ( ! $originally_disabled && $disabled == 1 ) {
-			do_action( 'disable_user_login.user_disabled', $user_id );
-		}
+		$this->maybe_trigger_enabled_disabled_actions( $user_id, $originally_disabled, $disabled );
 	}
 
 	/**
@@ -313,10 +295,15 @@ final class SS_Disable_User_Login_Plugin {
 			return $redirect_to;
 		}
 
-		$disabled = ($doaction === 'disable_user_login') ? 1 : 0;
+		$disabled = $doaction === 'disable_user_login' ? 1 : 0;
 
-		foreach ( $user_ids as $user_id ){
+		foreach ( $user_ids as $user_id ) {
+			// Store disabled status before update
+			$originally_disabled = $this->is_user_disabled( $user_id );
+
 			update_user_meta( $user_id, self::$user_meta_key, $disabled );
+
+			$this->maybe_trigger_enabled_disabled_actions( $user_id, $originally_disabled, $disabled );
 		}
 
 		if ($disabled){
@@ -376,5 +363,39 @@ final class SS_Disable_User_Login_Plugin {
 		return false;
 
 	} //end function is_user_disabled
+
+	/**
+	 * Conditionally trigger enabled/disabled action hooks based on change in user disabled status.
+	 *
+	 * @since  1.2.0
+	 * @access private
+	 *
+	 * @param $user_id             int 	   The user ID of the affected user.
+	 * @param $originally_disabled boolean Whether or not the user was previously disabled.
+	 * @param $disabled            boolean Whether or not the user is currently disabled.
+	 */
+	private function maybe_trigger_enabled_disabled_actions( $user_id, $originally_disabled, $disabled ) {
+
+		/**
+		 * Trigger an action when a disabled user's account has been
+		 * enabled.
+		 *
+		 * @since 1.2.0
+		 * @param int $user_id The ID of the user being enabled
+		 */
+		if ( $originally_disabled && $disabled == 0 ) {
+			do_action( 'disable_user_login.user_enabled', $user_id );
+		}
+ 		/**
+		 * Trigger an action when a user's account is enabled
+		 *
+		 * @since 1.2.0
+		 * @param int $user_id The ID of the user being disabled
+		 */
+		if ( ! $originally_disabled && $disabled == 1 ) {
+			do_action( 'disable_user_login.user_disabled', $user_id );
+		}
+
+	} //end function maybe_trigger_enabled_disabled_actions
 
 } //end class SS_Disable_User_Login_Plugin
