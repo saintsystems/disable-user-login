@@ -176,11 +176,7 @@ final class SS_Disable_User_Login_Plugin {
 		if ( ! current_user_can( 'edit_users' ) )
 			return;
 
-		if ( ! isset( $_POST['disable_user_login'] ) ) {
-			$disabled = 0;
-		} else {
-			$disabled = 1;
-		}
+		$disabled = isset( $_POST['disable_user_login'] ) ? 1 : 0;
 
 		update_user_meta( $user_id, self::$user_meta_key, $disabled );
 	}
