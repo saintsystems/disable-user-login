@@ -49,7 +49,8 @@ Yes, there is a filter in place for that, `disable_user_login_notice`.
 == Changelog ==
 
 = 1.1.0 =
-* Version bump.
+* Switch to `authenticate` filter for user login.
+* Multisite support.
 
 = 1.0.1 =
 * Version bump.
