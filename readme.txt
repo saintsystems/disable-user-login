@@ -1,7 +1,7 @@
 === Disable User Login ===
 Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
-Tags: users, login, account, disable
+Tags: users, user, login, account, disable
 Requires at least: 4.7.0
 Tested up to: 5.2.2
 Requires PHP: 5.6
