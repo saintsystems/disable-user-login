@@ -27,8 +27,13 @@ This can be useful in a few situations.
 
 == Installation ==
 
-1. Upload `disable-users` to your `/wp-content/plugins/` directory.
+1. Upload or extract the `disable-user-login` folder to your site's `/wp-content/plugins/` directory. You can also use the *Add new* option found in the *Plugins* menu in WordPress.
+2. Enable the plugin from the *Plugins* menu in WordPress.
+
+= Usage =
+
 1. Edit any user and then look for the "Disable User Account" checkbox.
+2. Bulk Disable/Enable user accounts by selecting one or more user accounts and then choosing *Enable* or *Disable* from the bulk actions menu.
 
 == Frequently Asked Questions ==
 
