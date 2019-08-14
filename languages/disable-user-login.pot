@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Disable User Login\n"
-"POT-Creation-Date: 2019-08-14 10:32-0500\n"
-"PO-Revision-Date: 2019-08-14 10:31-0500\n"
+"POT-Creation-Date: 2019-08-14 11:03-0500\n"
+"PO-Revision-Date: 2019-08-14 11:03-0500\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,31 +26,31 @@ msgstr ""
 msgid "If checked, the user cannot login with this account."
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:215
+#: includes/class-ss-disable-user-login-plugin.php:231
 msgid "<strong>ERROR</strong>: Account disabled."
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:232
-#: includes/class-ss-disable-user-login-plugin.php:249
+#: includes/class-ss-disable-user-login-plugin.php:248
+#: includes/class-ss-disable-user-login-plugin.php:265
 msgid "Disabled"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:268
+#: includes/class-ss-disable-user-login-plugin.php:284
 msgid "Enable"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:269
+#: includes/class-ss-disable-user-login-plugin.php:285
 msgid "Disable"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:306
+#: includes/class-ss-disable-user-login-plugin.php:327
 #, php-format
 msgid "Enabled %s user."
 msgid_plural "Enabled %s users."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-ss-disable-user-login-plugin.php:316
+#: includes/class-ss-disable-user-login-plugin.php:337
 #, php-format
 msgid "Disabled %s user."
 msgid_plural "Disabled %s users."
