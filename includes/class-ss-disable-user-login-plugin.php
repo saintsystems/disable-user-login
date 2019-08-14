@@ -204,7 +204,7 @@ final class SS_Disable_User_Login_Plugin {
 		// Get user meta
 		$disabled = get_user_meta( $user->ID, self::$user_meta_key, true );
 
-		// Is the use logging in disabled?
+		// Is the user logging in disabled?
 		if ( $disabled == '1' ) {
 			// Clear cookies, a.k.a log user out
 			wp_clear_auth_cookie();
