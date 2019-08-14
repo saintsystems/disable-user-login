@@ -194,7 +194,31 @@ final class SS_Disable_User_Login_Plugin {
 
 		$disabled = isset( $_POST['disable_user_login'] ) ? 1 : 0;
 
+		// Store disabled status before update
+		$originally_disabled = $this->is_user_disabled( $user_id );
+
+		// Update the user's disabled status
 		update_user_meta( $user_id, self::$user_meta_key, $disabled );
+
+		/**
+		 * Trigger an action when a disabled user's account has been
+		 * enabled.
+		 *
+		 * @since 1.2.0
+		 * @param int $user_id The ID of the user being enabled
+		 */
+		if ( $originally_disabled && $disabled == 0 ) {
+			do_action( 'disable_user_login.user_enabled', $user_id );
+		}
+ 		/**
+		 * Trigger an action when a user's account is enabled
+		 *
+		 * @since 1.2.0
+		 * @param int $user_id The ID of the user being disabled
+		 */
+		if ( ! $originally_disabled && $disabled == 1 ) {
+			do_action( 'disable_user_login.user_disabled', $user_id );
+		}
 	}
 
 	/**
@@ -208,10 +232,20 @@ final class SS_Disable_User_Login_Plugin {
 	public function user_login( $user, $username, $password ) {
 
 		if ( is_a( $user, 'WP_User' ) ) {
-			$disabled = get_user_meta( $user->ID, self::$user_meta_key, true );
 
-			// Is the use logging in disabled?
-			if ( $disabled ) {
+			// Is the user logging in disabled?
+			if ( $this->is_user_disabled( $user->ID ) ) {
+
+				/**
+				 * Trigger an action when a disabled user attempts
+				 * to login.
+				 *
+				 * @param WP_User $user The user who attempted to login
+				 *
+				 * @since 1.2.0
+				 */
+				do_action( 'disable_user_login.disabled_login_attempt', $user );
+
 				return new WP_Error( 'disable_user_login_user_disabled', apply_filters( 'disable_user_login.disabled_message', __( '<strong>ERROR</strong>: Account disabled.', 'disable_user_login' ) ) );
 			}
 		}
@@ -320,5 +354,27 @@ final class SS_Disable_User_Login_Plugin {
 				) . '</div>', $updated );
 		}
 	}
+
+	/**
+	 * Checks if a user is disabled
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param int $user_id The user ID to check
+	 * @return boolean true if disabled, false if enabled
+	 */
+	private function is_user_disabled( $user_id ) {
+
+		// Get user meta
+		$disabled = get_user_meta( $user_id, self::$user_meta_key, true );
+
+		// Is the user logging in disabled?
+		if ( $disabled == '1' ) {
+			return true;
+		}
+
+		return false;
+
+	} //end function is_user_disabled
 
 } //end class SS_Disable_User_Login_Plugin
