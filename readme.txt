@@ -3,9 +3,9 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: users, user, login, account, disable
 Requires at least: 4.7.0
-Tested up to: 5.2.2
+Tested up to: 5.6.0
 Requires PHP: 5.6
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -47,6 +47,9 @@ Yes, there is a filter in place for that, `disable_user_login_notice`.
 2. Message when a disabled user tries to login.
 
 == Changelog ==
+
+= 1.2.1 =
+* Tested up to WP 5.6
 
 = 1.2.0 =
 * Add action hooks when user accounts are enabled/disabled and when disabled user attempts to login.
