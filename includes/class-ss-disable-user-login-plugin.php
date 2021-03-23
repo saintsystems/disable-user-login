@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.2.0';
+	private static $version = '1.3.0';
 
 	/**
 	 * Plugin singleton instance
@@ -81,6 +81,9 @@ final class SS_Disable_User_Login_Plugin {
 		add_action( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 10, 3 );
 		add_action( 'admin_footer-users.php',	  array( $this, 'manage_users_css'            )        );
 		add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
+		
+		// Disabled hook
+		add_action( 'disable_user_login.user_disabled', array( $this, 'force_logout' ), 10, 1 );
 
 		// Filters
 		add_filter( 'authenticate',               array( $this, 'user_login'                  ), 1000, 3 );
@@ -397,5 +400,20 @@ final class SS_Disable_User_Login_Plugin {
 		}
 
 	} //end function maybe_trigger_enabled_disabled_actions
+
+	/**
+	 * Force the passed $user_id to logout of WP
+	 * @since 1.3.0
+	 * @param int $user_id The ID of the user to logout
+	 */
+	public function force_logout( $user_id ) {
+
+		// Get all sessions for $user_id
+		$sessions = WP_Session_Tokens::get_instance( $user_id );
+
+		// Destroy all the sessions for the user.
+		$sessions->destroy_all();
+
+	} //end function force_logout
 
 } //end class SS_Disable_User_Login_Plugin
