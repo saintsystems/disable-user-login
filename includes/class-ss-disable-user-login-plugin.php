@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.0';
+	private static $version = '1.3.1';
 
 	/**
 	 * Plugin singleton instance
@@ -186,14 +186,9 @@ final class SS_Disable_User_Login_Plugin {
 	 */
 	public function save_disabled_field( $user_id ) {
 
-		// Don't disable super admins.
-		if ( is_multisite() && is_super_admin( $user_id ) ) {
+		if ( ! $this->can_disable( $user_id ) ) {
 			return;
 		}
-
-		// Only worry about saving this field if the user has access.
-		if ( ! current_user_can( $this->get_edit_cap() ) )
-			return;
 
 		$disabled = isset( $_POST['disable_user_login'] ) ? 1 : 0;
 
@@ -204,6 +199,29 @@ final class SS_Disable_User_Login_Plugin {
 		update_user_meta( $user_id, self::$user_meta_key, $disabled );
 
 		$this->maybe_trigger_enabled_disabled_actions( $user_id, $originally_disabled, $disabled );
+	}
+
+	/**
+	 * Returns whether or not the passed $user_id can be disabled
+	 * @since 1.3.1
+	 */
+	public function can_disable( $user_id ) {
+		// Don't disable super admins.
+		if ( is_multisite() && is_super_admin( $user_id ) ) {
+			return false;
+		}
+
+		// Make sure the user has access
+		if ( ! current_user_can( $this->get_edit_cap() ) ) {
+			return false;
+		}
+
+		// Don't disable the currently logged in user.
+		if ( $user_id == get_current_user_id() ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -293,27 +311,36 @@ final class SS_Disable_User_Login_Plugin {
 	 * Handle the bulk action to enable/disable users
 	 * @since 1.0.6
 	 */
-	public function handle_bulk_disable_users($redirect_to, $doaction, $user_ids) {
-		if ($doaction !== 'disable_user_login' && $doaction !== 'enable_user_login'){
+	public function handle_bulk_disable_users( $redirect_to, $doaction, $user_ids ) {
+		if ( $doaction !== 'disable_user_login' && $doaction !== 'enable_user_login' ) {
 			return $redirect_to;
 		}
 
 		$disabled = $doaction === 'disable_user_login' ? 1 : 0;
 
+		$affected_user_count = 0;
+
 		foreach ( $user_ids as $user_id ) {
+
+			if ( $disabled === 1 && ! $this->can_disable( $user_id ) ) {
+				continue;
+			}
+
 			// Store disabled status before update
 			$originally_disabled = $this->is_user_disabled( $user_id );
 
 			update_user_meta( $user_id, self::$user_meta_key, $disabled );
 
 			$this->maybe_trigger_enabled_disabled_actions( $user_id, $originally_disabled, $disabled );
+
+			$affected_user_count++;
 		}
 
-		if ($disabled){
-			$redirect_to = add_query_arg( 'disable_user_login', count($user_ids), $redirect_to );
+		if ( $disabled ) {
+			$redirect_to = add_query_arg( 'disable_user_login', $affected_user_count, $redirect_to );
 			$redirect_to = remove_query_arg( 'disable_user_login', $redirect_to );
 		} else {
-			$redirect_to = add_query_arg( 'disable_user_login',  count($user_ids), $redirect_to );
+			$redirect_to = add_query_arg( 'disable_user_login',  $affected_user_count, $redirect_to );
 			$redirect_to = remove_query_arg( 'disable_user_login', $redirect_to );
 		}
 		return $redirect_to;
@@ -324,7 +351,7 @@ final class SS_Disable_User_Login_Plugin {
 	 * @since 1.0.6
 	 */
 	public function bulk_disable_user_notices() {
-		if (! empty( $_REQUEST['disable_user_login'] ) ){
+		if ( ! empty( $_REQUEST['disable_user_login'] ) ){
 			$updated = intval( $_REQUEST['disable_user_login'] );
 			printf( '<div id="message" class="updated">' .
 				_n( 'Enabled %s user.',
@@ -334,7 +361,7 @@ final class SS_Disable_User_Login_Plugin {
 				) . '</div>', $updated );
 		}
 
-		if (! empty( $_REQUEST['disable_user_login'] ) ){
+		if ( ! empty( $_REQUEST['disable_user_login'] ) ){
 			$updated = intval( $_REQUEST['disable_user_login'] );
 			printf( '<div id="message" class="updated">' .
 				_n( 'Disabled %s user.',
