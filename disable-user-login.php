@@ -4,13 +4,13 @@
  * Plugin URI:  http://wordpress.org/plugins/disable-user-login
  * Description: Provides the ability to disable user accounts and prevent them from logging in.
  * Version:     1.3.1
- * 
+ *
  * Author:      Saint Systems
  * Author URI:  https://www.saintsystems.com
  * Text Domain: disable-user-login
  * Domain Path: languages
  *
- * Copyright: � 2019 Saint Systems
+ * Copyright: © 2019 Saint Systems
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
