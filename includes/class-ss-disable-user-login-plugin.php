@@ -169,7 +169,7 @@ final class SS_Disable_User_Login_Plugin {
 					</th>
 					<td>
 						<input type="checkbox" name="disable_user_login" id="disable_user_login" value="1" <?php checked( 1, get_the_author_meta( self::$user_meta_key, $user->ID ) ); ?> />
-						<span class="description"><?php _e( 'If checked, the user cannot login with this account.' , 'disable_user_login' ); ?></span>
+                        <label for="disable_user_login"><span class="description"><?php _e( 'If checked, the user cannot login with this account.' , 'disable_user_login' ); ?></span></label>
 					</td>
 				</tr>
 			<tbody>
