@@ -78,10 +78,10 @@ final class SS_Disable_User_Login_Plugin {
 		add_action( 'edit_user_profile',          array( $this, 'add_disabled_field'          )        );
 		add_action( 'personal_options_update',    array( $this, 'save_disabled_field'         )        );
 		add_action( 'edit_user_profile_update',   array( $this, 'save_disabled_field'         )        );
-		add_action( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 10, 3 );
+		add_filter( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 10, 3 );
 		add_action( 'admin_footer-users.php',	  array( $this, 'manage_users_css'            )        );
 		add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
-		
+
 		// Disabled hook
 		add_action( 'disable_user_login.user_disabled', array( $this, 'force_logout' ), 10, 1 );
 
@@ -165,11 +165,11 @@ final class SS_Disable_User_Login_Plugin {
 			<tbody>
 				<tr>
 					<th>
-						<label for="disable_user_login"><?php _e(' Disable User Account', 'disable_user_login' ); ?></label>
+						<label for="disable_user_login"><?php _e(' Disable User Account', 'disable-user-login' ); ?></label>
 					</th>
 					<td>
 						<input type="checkbox" name="disable_user_login" id="disable_user_login" value="1" <?php checked( 1, get_the_author_meta( self::$user_meta_key, $user->ID ) ); ?> />
-                        <label for="disable_user_login"><span class="description"><?php _e( 'If checked, the user cannot login with this account.' , 'disable_user_login' ); ?></span></label>
+                        <label for="disable_user_login"><span class="description"><?php _e( 'If checked, the user cannot login with this account.' , 'disable-user-login' ); ?></span></label>
 					</td>
 				</tr>
 			<tbody>
@@ -249,7 +249,7 @@ final class SS_Disable_User_Login_Plugin {
 				 */
 				do_action( 'disable_user_login.disabled_login_attempt', $user );
 
-				return new WP_Error( 'disable_user_login_user_disabled', apply_filters( 'disable_user_login.disabled_message', __( '<strong>ERROR</strong>: Account disabled.', 'disable_user_login' ) ) );
+				return new WP_Error( 'disable_user_login_user_disabled', apply_filters( 'disable_user_login.disabled_message', __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' ) ) );
 			}
 		}
 
@@ -286,6 +286,8 @@ final class SS_Disable_User_Login_Plugin {
 				return __( 'Disabled', 'disable-user-login' );
 			}
 		}
+
+		return $empty; // always return, otherwise we overwrite stuff from other plugins.
 	}
 
 	/**

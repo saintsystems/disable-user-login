@@ -3,7 +3,7 @@ Contributors: saintsystems, anderly
 Donate link: http://ssms.us/hVdk
 Tags: users, user, login, account, disable
 Requires at least: 4.7.0
-Tested up to: 5.7.0
+Tested up to: 5.7
 Requires PHP: 5.6
 Stable tag: 1.3.1
 License: GPLv3
