@@ -3,56 +3,81 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Disable User Login\n"
-"POT-Creation-Date: 2019-08-14 11:03-0500\n"
-"PO-Revision-Date: 2019-08-14 11:03-0500\n"
+"POT-Creation-Date: 2021-06-25 14:37-0500\n"
+"PO-Revision-Date: 2021-06-25 14:37-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: disable-user-login.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
-#: includes/class-ss-disable-user-login-plugin.php:165
-msgid " Disable User Account"
+#: includes/class-ss-disable-user-login-plugin.php:168
+msgid "Disable User Account"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:169
+#: includes/class-ss-disable-user-login-plugin.php:172
 msgid "If checked, the user cannot login with this account."
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:231
+#: includes/class-ss-disable-user-login-plugin.php:252
 msgid "<strong>ERROR</strong>: Account disabled."
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:248
-#: includes/class-ss-disable-user-login-plugin.php:265
+#: includes/class-ss-disable-user-login-plugin.php:269
+#: includes/class-ss-disable-user-login-plugin.php:286
 msgid "Disabled"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:284
+#: includes/class-ss-disable-user-login-plugin.php:307
 msgid "Enable"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:285
+#: includes/class-ss-disable-user-login-plugin.php:308
 msgid "Disable"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:327
+#: includes/class-ss-disable-user-login-plugin.php:359
 #, php-format
 msgid "Enabled %s user."
 msgid_plural "Enabled %s users."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-ss-disable-user-login-plugin.php:337
+#: includes/class-ss-disable-user-login-plugin.php:369
 #, php-format
 msgid "Disabled %s user."
 msgid_plural "Disabled %s users."
 msgstr[0] ""
 msgstr[1] ""
+
+#. Plugin Name of the plugin/theme
+msgid "Disable User Login"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://wordpress.org/plugins/disable-user-login"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Provides the ability to disable user accounts and prevent them from logging "
+"in."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Saint Systems"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.saintsystems.com"
+msgstr ""

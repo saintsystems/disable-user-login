@@ -126,10 +126,10 @@ final class SS_Disable_User_Login_Plugin {
 
 		$mofile = sprintf( '%1$s-%2$s.mo', 'disable-user-login', $locale );
 
-		// Look for wp-content/languages/woocommerce-mailchimp/woocommerce-mailchimp-{lang}_{country}.mo
+		// Look for wp-content/languages/disable-user-login/disable-user-login-{lang}_{country}.mo
 		$mofile_global1 = WP_LANG_DIR . '/disable-user-login/' . $mofile;
 
-		// Look in wp-content/languages/plugins/woocommerce-mailchimp
+		// Look in wp-content/languages/plugins/disable-user-login
 		$mofile_global2 = WP_LANG_DIR . '/plugins/disable-user-login/' . $mofile;
 
 		if ( file_exists( $mofile_global1 ) ) {
@@ -165,7 +165,7 @@ final class SS_Disable_User_Login_Plugin {
 			<tbody>
 				<tr>
 					<th>
-						<label for="disable_user_login"><?php _e(' Disable User Account', 'disable-user-login' ); ?></label>
+						<label for="disable_user_login"><?php _e('Disable User Account', 'disable-user-login' ); ?></label>
 					</th>
 					<td>
 						<input type="checkbox" name="disable_user_login" id="disable_user_login" value="1" <?php checked( 1, get_the_author_meta( self::$user_meta_key, $user->ID ) ); ?> />
