@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.1';
+	private static $version = '1.3.2';
 
 	/**
 	 * Plugin singleton instance
@@ -38,6 +38,15 @@ final class SS_Disable_User_Login_Plugin {
 	 */
 	public static function version() {
 		return self::$version;
+	}
+
+	/**
+	 * Returns the user meta key
+	 *
+	 * @return string
+	 */
+	public static function user_meta_key() {
+		return self::$user_meta_key;
 	}
 
 	/**
@@ -273,25 +282,25 @@ final class SS_Disable_User_Login_Plugin {
 	/**
 	 * Set content of disabled users column
 	 *
-	 * @since 1.0.0
-	 * @param empty $empty
+	 * @since 1.3.2
+	 * @param empty $output
 	 * @param string $column_name
-	 * @param int $user_ID
+	 * @param int $user_id
 	 * @return string
 	 */
-	public function manage_users_column_content( $empty, $column_name, $user_ID ) {
+	public function manage_users_column_content( $output, $column_name, $user_id ) {
 
 		if ( $column_name == 'disable_user_login' ) {
-			if ( get_the_author_meta( self::$user_meta_key, $user_ID ) == 1 ) {
+			if ( get_the_author_meta( self::$user_meta_key, $user_id ) == 1 ) {
 				return __( 'Disabled', 'disable-user-login' );
 			}
 		}
 
-		return $empty; // always return, otherwise we overwrite stuff from other plugins.
+		return $output; // always return, otherwise we overwrite stuff from other plugins.
 	}
 
 	/**
-	 * Specifiy the width of our custom column
+	 * Specify the width of our custom column
 	 *
 	 * @since 1.0.0
  	 */
@@ -419,7 +428,7 @@ final class SS_Disable_User_Login_Plugin {
 			do_action( 'disable_user_login.user_enabled', $user_id );
 		}
  		/**
-		 * Trigger an action when a user's account is enabled
+		 * Trigger an action when an enabled user's account is disabled
 		 *
 		 * @since 1.2.0
 		 * @param int $user_id The ID of the user being disabled
