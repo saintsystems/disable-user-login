@@ -1,6 +1,6 @@
 === Disable User Login ===
 Contributors: saintsystems, anderly
-Donate link: http://ssms.us/hVdk
+Donate link: https://ssms.us/donate
 Tags: users, user, login, account, disable
 Requires at least: 4.7.0
 Tested up to: 5.7
