@@ -39,7 +39,7 @@ This can be useful in a few situations.
 
 = Can I change the message a disabled user sees? =
 
-Yes, there is a filter in place for that, `disable_user_login_notice`.
+Yes, there is a filter in place for that, `disable_user_login.disabled_message`.
 
 == Screenshots ==
 
