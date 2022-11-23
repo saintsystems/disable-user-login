@@ -32,6 +32,19 @@ If you want to run the latest development version, you have two options:
 
 This will download the latest development version of the Disable User Login plugin. While this version is usually stable, it is not recommended for use in a production environment.
 
+Customize Disabled User Message
+------------
+You can customize the message users see when their accounts are disabled by hooking into the `disable_user_login.disabled_message` hook exposed by the plugin or by providing a translation in your languages file.
+
+```php
+    add_filter( 'disable_user_login.disabled_message', function( $disabled_message ) {
+       // Defaults to: __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' )
+       $disabled_message = '<strong>ERROR</strong>: Get outta here!';
+       
+       return $disabled_message;
+    }, 10, 1 );
+```
+
 Bugs
 ----
 If you think you've found a bug, [please raise an issue here](https://github.com/saintsystems/disable-user-login/issues?state=open).
