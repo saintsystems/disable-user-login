@@ -5,7 +5,7 @@ Tags: users, user, login, account, disable
 Requires at least: 4.7.0
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -47,6 +47,9 @@ Yes, there is a filter in place for that, `disable_user_login.disabled_message`.
 2. Message when a disabled user tries to login.
 
 == Changelog ==
+
+= 1.3.5 =
+* Fix to disable application passwords (fixes #7).
 
 = 1.3.4 =
 * Add user enable/disable quick links.

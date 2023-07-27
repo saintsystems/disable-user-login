@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.4';
+	private static $version = '1.3.5';
 
 	/**
 	 * Plugin singleton instance
@@ -135,6 +135,7 @@ final class SS_Disable_User_Login_Plugin {
 		add_filter( 'bulk_actions-users',         array( $this, 'bulk_action_disable_users'   )        );
 		add_filter( 'handle_bulk_actions-users',  array( $this, 'handle_bulk_disable_users'   ), 10, 3 );
 		add_filter( 'user_row_actions',           array( $this, 'add_quick_links'             ), 10, 2 );
+		add_filter( 'wp_is_application_passwords_available_for_user', array( $this, 'maybe_disable_application_passwords_for_user' ), 10, 2 );
 
 	} //end function add_hooks
 
@@ -158,6 +159,22 @@ final class SS_Disable_User_Login_Plugin {
 			$actions[ 'disable_user_login' ] = "<a class='dul-quick-links' href='#' data-dul-action='$action' data-dul-user-id='$user_object->ID'>" . $label . '</a>';
 		}
 		return $actions;
+	}
+
+	/**
+	 * Prevent users with disabled accounts to use application passwords.
+	 *
+	 * @param bool $allow Whether to enable application passwords for the user. Default true.
+	 * @param WP_User $user user that is trying to access application passwords.
+	 *
+	 * @return bool true if application passwords should be enabled, false if it should be disabled.
+	 */
+	function maybe_disable_application_passwords_for_user( $allow, $user ) {
+		if ( $this->is_user_disabled( $user->ID ) ) {
+			return false;
+		}
+
+		return $allow;
 	}
 
 	/**
