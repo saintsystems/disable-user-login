@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.3';
+	private static $version = '1.3.4';
 
 	/**
 	 * Plugin singleton instance
@@ -59,6 +59,7 @@ final class SS_Disable_User_Login_Plugin {
 		if ( empty( self::$instance ) && ! ( self::$instance instanceof SS_Disable_User_Login_Plugin ) ) {
 
 			self::$instance = new SS_Disable_User_Login_Plugin();
+			self::$instance->define_constants();
 			self::$instance->load_plugin_textdomain();
 			self::$instance->add_hooks();
 			do_action( 'disable_user_login.loaded' );
@@ -79,17 +80,50 @@ final class SS_Disable_User_Login_Plugin {
 	}
 
 	/**
+	 * Define Plugin Constants.
+	 */
+	private function define_constants() {
+
+		// Plugin version.
+		$this->define( 'SS_DISABLE_USER_LOGIN_VERSION', self::version() );
+
+		// Plugin Folder Path.
+		$this->define( 'SS_DISABLE_USER_LOGIN_DIR', plugin_dir_path( SS_DISABLE_USER_LOGIN_FILE ) );
+
+		// Plugin Folder URL.
+		$this->define( 'SS_DISABLE_USER_LOGIN_URL', plugin_dir_url( SS_DISABLE_USER_LOGIN_FILE ) );
+
+	} //function define_constants
+
+	/**
+	 * Define constant if not already set.
+	 *
+	 * @param  string      $name  Constant name.
+	 * @param  string|bool $value Constant value.
+	 * @return void
+	 */
+	private function define( $name, $value ) {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
+	} //function define
+
+	/**
 	 * Setup the plugin action hooks and filters
 	 */
 	private function add_hooks() {
 
-		// Actions
-		add_action( 'edit_user_profile',          array( $this, 'add_disabled_field'          )        );
-		add_action( 'personal_options_update',    array( $this, 'save_disabled_field'         )        );
-		add_action( 'edit_user_profile_update',   array( $this, 'save_disabled_field'         )        );
-		add_filter( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 10, 3 );
-		add_action( 'admin_footer-users.php',	  array( $this, 'manage_users_css'            )        );
-		add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
+		if ( is_admin() ) {
+			// Actions
+			add_action( 'edit_user_profile',          array( $this, 'add_disabled_field'          )        );
+			add_action( 'personal_options_update',    array( $this, 'save_disabled_field'         )        );
+			add_action( 'edit_user_profile_update',   array( $this, 'save_disabled_field'         )        );
+			add_filter( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 10, 3 );
+			add_action( 'admin_footer-users.php',	  array( $this, 'manage_users_css'            )        );
+			add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
+			add_action( 'admin_enqueue_scripts',      array( $this, 'enqueue_scripts'             )        );
+			add_action( 'wp_ajax_ssdul_enable_disable_user', array( $this, 'enable_disable_user'  )        );
+		}
 
 		// Disabled hook
 		add_action( 'disable_user_login.user_disabled', array( $this, 'force_logout' ), 10, 1 );
@@ -100,8 +134,31 @@ final class SS_Disable_User_Login_Plugin {
 		add_filter( 'wpmu_users_columns',         array( $this, 'manage_users_columns'        )        );
 		add_filter( 'bulk_actions-users',         array( $this, 'bulk_action_disable_users'   )        );
 		add_filter( 'handle_bulk_actions-users',  array( $this, 'handle_bulk_disable_users'   ), 10, 3 );
+		add_filter( 'user_row_actions',           array( $this, 'add_quick_links'             ), 10, 2 );
 
 	} //end function add_hooks
+
+	/**
+	 * Adds a quick 'enable/disable' link to the user row actions based on the current user status.
+	 *
+	 * @param [type] $actions
+	 * @param [type] $user_object
+	 * @return void
+	 */
+	function add_quick_links( $actions, $user_object ) {
+
+		if ( $user_object->ID !== get_current_user_id() ) {
+			$action = 'disable';
+			$label = __( 'Disable', 'disable-user-login' );
+
+			if ( $this->is_user_disabled( $user_object->ID ) ) {
+				$action = 'enable';
+				$label = __( 'Enable', 'disable-user-login' );
+			}
+			$actions[ 'disable_user_login' ] = "<a class='dul-quick-links' href='#' data-dul-action='$action' data-dul-user-id='$user_object->ID'>" . $label . '</a>';
+		}
+		return $actions;
+	}
 
 	/**
 	 * Gets the capability associated with banning a user
@@ -231,6 +288,46 @@ final class SS_Disable_User_Login_Plugin {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Enable/Disable users from user row actions quick links.
+	 */
+	public function enable_disable_user() {
+
+		check_ajax_referer( 'ssdul_quick_links', 'nonce' );
+
+		if ( empty( $_POST['data'] ) ) return;
+
+		$data = $_POST['data'];
+
+		$user_id = $data['user_id'];
+
+		$action = $data['action'];
+
+		if ( ! $this->can_disable( $user_id ) ) {
+			$response = array(
+				'error' => sprintf( esc_html__( 'User %s cannot disable user $s.', 'disable-user-login' ), get_current_user_id(), $user_id )
+			);
+			wp_send_json( $response);
+			return;
+		}
+
+		$disabled = $action == 'disable' ? 1 : 0;
+
+		// Store disabled status before update
+		$originally_disabled = $this->is_user_disabled( $user_id );
+
+		// Update the user's disabled status
+		update_user_meta( $user_id, self::$user_meta_key, $disabled );
+
+		$this->maybe_trigger_enabled_disabled_actions( $user_id, $originally_disabled, $disabled );
+
+		$response = array(
+			'status_code' => 200,
+			'message'     => sprintf( esc_html__( 'Success: user %s %s', 'disable-user-login' ), $user_id, ($disabled ? 'disabled' : 'enabled' ) ),
+		);
+		wp_send_json( $response, '200' );
 	}
 
 	/**
@@ -453,5 +550,34 @@ final class SS_Disable_User_Login_Plugin {
 		$sessions->destroy_all();
 
 	} //end function force_logout
+
+	/**
+	 * Enqueue plugin settings scripts.
+	 *
+	 * @since 1.3.4
+	 *
+	 * @access public
+	 * @return array $scripts
+	 */
+	public function enqueue_scripts() {
+
+		// Plugin scripts
+		wp_register_script( 'disable-user-login-admin', SS_DISABLE_USER_LOGIN_URL . 'assets/js/admin.js', array( 'jquery' ), time() ) ;//self::version() );
+
+		$nonces = array(
+			'quick_links'    	  => wp_create_nonce( 'ssdul_quick_links' ),
+		);
+
+		$ssdul = array(
+			//'messages' => $translations,
+			'nonces'   => $nonces,
+		);
+
+		wp_localize_script( 'disable-user-login-admin', 'SSDUL', $ssdul );
+
+		// Scripts.
+		wp_enqueue_script( 'disable-user-login-admin' );
+
+	} //end function scripts
 
 } //end class SS_Disable_User_Login_Plugin
