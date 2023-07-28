@@ -324,7 +324,7 @@ final class SS_Disable_User_Login_Plugin {
 
 		if ( ! $this->can_disable( $user_id ) ) {
 			$response = array(
-				'error' => sprintf( esc_html__( 'User %s cannot disable user $s.', 'disable-user-login' ), get_current_user_id(), $user_id )
+				'error' => sprintf( 'User %s cannot disable user $s.', get_current_user_id(), $user_id )
 			);
 			wp_send_json( $response);
 			return;

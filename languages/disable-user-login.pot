@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Disable User Login\n"
-"POT-Creation-Date: 2021-06-25 14:37-0500\n"
+"POT-Creation-Date: 2023-07-28 07:43-0500\n"
 "PO-Revision-Date: 2023-07-28 07:40-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,8 +16,8 @@ msgstr ""
 "X-Poedit-WPHeader: disable-user-login.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
@@ -37,11 +37,6 @@ msgstr ""
 
 #: includes/class-ss-disable-user-login-plugin.php:255
 msgid "If checked, the user cannot login with this account."
-msgstr ""
-
-#: includes/class-ss-disable-user-login-plugin.php:327
-#, php-format
-msgid "User %s cannot disable user $s."
 msgstr ""
 
 #: includes/class-ss-disable-user-login-plugin.php:375
