@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.5';
+	private static $version = '1.3.6';
 
 	/**
 	 * Plugin singleton instance
@@ -148,7 +148,7 @@ final class SS_Disable_User_Login_Plugin {
 	 */
 	function add_quick_links( $actions, $user_object ) {
 
-		if ( $user_object->ID !== get_current_user_id() ) {
+		if ( $user_object->ID !== get_current_user_id() && current_user_can( $this->get_edit_cap() ) ) {
 			$action = 'disable';
 			$label = _x( 'Disable', 'user row action', 'disable-user-login' );
 
