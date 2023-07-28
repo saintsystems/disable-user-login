@@ -1,16 +1,16 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Disable User Login\n"
 "POT-Creation-Date: 2021-06-25 14:37-0500\n"
-"PO-Revision-Date: 2021-06-25 14:37-0500\n"
+"PO-Revision-Date: 2023-07-28 07:26-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: disable-user-login.php\n"
@@ -21,39 +21,61 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
-#: includes/class-ss-disable-user-login-plugin.php:168
-msgid "Disable User Account"
-msgstr ""
-
-#: includes/class-ss-disable-user-login-plugin.php:172
-msgid "If checked, the user cannot login with this account."
-msgstr ""
-
-#: includes/class-ss-disable-user-login-plugin.php:252
-msgid "<strong>ERROR</strong>: Account disabled."
-msgstr ""
-
-#: includes/class-ss-disable-user-login-plugin.php:269
-#: includes/class-ss-disable-user-login-plugin.php:286
-msgid "Disabled"
-msgstr ""
-
-#: includes/class-ss-disable-user-login-plugin.php:307
-msgid "Enable"
-msgstr ""
-
-#: includes/class-ss-disable-user-login-plugin.php:308
+#: includes/class-ss-disable-user-login-plugin.php:153
+msgctxt "user row action"
 msgid "Disable"
 msgstr ""
 
-#: includes/class-ss-disable-user-login-plugin.php:359
+#: includes/class-ss-disable-user-login-plugin.php:157
+msgctxt "user row action"
+msgid "Enable"
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:251
+msgid "Disable User Account"
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:255
+msgid "If checked, the user cannot login with this account."
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:327
+#, php-format
+msgid "User %s cannot disable user $s."
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:345
+#, php-format
+msgid "Success: user %s %s"
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:375
+msgid "<strong>ERROR</strong>: Account disabled."
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:392
+#: includes/class-ss-disable-user-login-plugin.php:409
+msgid "Disabled"
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:430
+msgctxt "bulk action"
+msgid "Enable"
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:431
+msgctxt "bulk action"
+msgid "Disable"
+msgstr ""
+
+#: includes/class-ss-disable-user-login-plugin.php:482
 #, php-format
 msgid "Enabled %s user."
 msgid_plural "Enabled %s users."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-ss-disable-user-login-plugin.php:369
+#: includes/class-ss-disable-user-login-plugin.php:492
 #, php-format
 msgid "Disabled %s user."
 msgid_plural "Disabled %s users."

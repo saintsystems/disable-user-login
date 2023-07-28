@@ -150,11 +150,11 @@ final class SS_Disable_User_Login_Plugin {
 
 		if ( $user_object->ID !== get_current_user_id() ) {
 			$action = 'disable';
-			$label = __( 'Disable', 'disable-user-login' );
+			$label = _x( 'Disable', 'user row action', 'disable-user-login' );
 
 			if ( $this->is_user_disabled( $user_object->ID ) ) {
 				$action = 'enable';
-				$label = __( 'Enable', 'disable-user-login' );
+				$label = _x( 'Enable', 'user row action', 'disable-user-login' );
 			}
 			$actions[ 'disable_user_login' ] = "<a class='dul-quick-links' href='#' data-dul-action='$action' data-dul-user-id='$user_object->ID'>" . $label . '</a>';
 		}
@@ -427,8 +427,8 @@ final class SS_Disable_User_Login_Plugin {
 	 * @since 1.0.6
 	 */
 	public function bulk_action_disable_users($bulk_actions) {
-		$bulk_actions['enable_user_login']  = __( 'Enable',  'disable-user-login' );
-		$bulk_actions['disable_user_login'] = __( 'Disable', 'disable-user-login' );
+		$bulk_actions['enable_user_login']  = _x( 'Enable', 'bulk action',  'disable-user-login' );
+		$bulk_actions['disable_user_login'] = _x( 'Disable', 'bulk action', 'disable-user-login' );
 		return $bulk_actions;
 	}
 
