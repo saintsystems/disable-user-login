@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Disable User Login\n"
 "POT-Creation-Date: 2021-06-25 14:37-0500\n"
-"PO-Revision-Date: 2023-07-28 07:26-0500\n"
+"PO-Revision-Date: 2023-07-28 07:40-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -42,11 +42,6 @@ msgstr ""
 #: includes/class-ss-disable-user-login-plugin.php:327
 #, php-format
 msgid "User %s cannot disable user $s."
-msgstr ""
-
-#: includes/class-ss-disable-user-login-plugin.php:345
-#, php-format
-msgid "Success: user %s %s"
 msgstr ""
 
 #: includes/class-ss-disable-user-login-plugin.php:375

@@ -342,7 +342,7 @@ final class SS_Disable_User_Login_Plugin {
 
 		$response = array(
 			'status_code' => 200,
-			'message'     => sprintf( esc_html__( 'Success: user %s %s', 'disable-user-login' ), $user_id, ($disabled ? 'disabled' : 'enabled' ) ),
+			'message'     => sprintf( 'Success: user %s %s', $user_id, ($disabled ? 'disabled' : 'enabled' ) ),
 		);
 		wp_send_json( $response, '200' );
 	}
