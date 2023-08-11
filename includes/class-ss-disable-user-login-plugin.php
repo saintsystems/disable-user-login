@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.6';
+	private static $version = '1.3.7';
 
 	/**
 	 * Plugin singleton instance

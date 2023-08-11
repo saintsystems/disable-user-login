@@ -3,9 +3,10 @@ Contributors: saintsystems, anderly
 Donate link: https://ssms.us/donate
 Tags: users, user, login, account, disable
 Requires at least: 4.7.0
-Tested up to: 6.1.1
+Tested up to: 6.3
 Requires PHP: 5.6
-Stable tag: 1.3.6
+Stable tag: 1.3.7
+Version: 1.3.7
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -47,6 +48,9 @@ Yes, there is a filter in place for that, `disable_user_login.disabled_message`.
 2. Message when a disabled user tries to login.
 
 == Changelog ==
+
+= 1.3.7 =
+* Add hooks for multisite.
 
 = 1.3.6 =
 * Permission fix on quick links.
