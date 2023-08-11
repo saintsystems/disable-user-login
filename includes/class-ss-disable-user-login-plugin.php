@@ -125,6 +125,10 @@ final class SS_Disable_User_Login_Plugin {
 			add_action( 'wp_ajax_ssdul_enable_disable_user', array( $this, 'enable_disable_user'  )        );
 		}
 
+		if ( is_network_admin() ) {
+			add_action( 'network_admin_notices',      array( $this, 'bulk_disable_user_notices'   )        );
+		}
+
 		// Disabled hook
 		add_action( 'disable_user_login.user_disabled', array( $this, 'force_logout' ), 10, 1 );
 
@@ -136,6 +140,11 @@ final class SS_Disable_User_Login_Plugin {
 		add_filter( 'handle_bulk_actions-users',  array( $this, 'handle_bulk_disable_users'   ), 10, 3 );
 		add_filter( 'user_row_actions',           array( $this, 'add_quick_links'             ), 10, 2 );
 		add_filter( 'wp_is_application_passwords_available_for_user', array( $this, 'maybe_disable_application_passwords_for_user' ), 10, 2 );
+
+		// Multisite Filters
+		add_filter( 'ms_user_row_actions',        array( $this, 'add_quick_links'             ), 10, 2 );// Adds custom action link to network's users page
+		add_filter( 'bulk_actions-users-network', array( $this, 'bulk_action_disable_users'   )        );
+		add_filter( 'handle_network_bulk_actions-users-network', array( $this, 'handle_bulk_disable_users' ), 10, 3 );
 
 	} //end function add_hooks
 
