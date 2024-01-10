@@ -16,6 +16,7 @@
 			e.preventDefault();
 			var $this = $(this);
 			var action = $this.attr('data-dul-action');
+			var nonce = $this.attr('data-dul-nonce');
 			var user_id = $this.data('dul-user-id');
 
 			var data = {
@@ -24,7 +25,7 @@
 					user_id: user_id,
 					action: action
 				},
-				nonce: SSDUL.nonces.quick_links
+				nonce: nonce //SSDUL.nonces.quick_links
 			};
 
 			console.log(`${action} user id: ${user_id}`);

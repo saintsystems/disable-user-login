@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.7';
+	private static $version = '1.3.8';
 
 	/**
 	 * Plugin singleton instance
@@ -165,7 +165,8 @@ final class SS_Disable_User_Login_Plugin {
 				$action = 'enable';
 				$label = _x( 'Enable', 'user row action', 'disable-user-login' );
 			}
-			$actions[ 'disable_user_login' ] = "<a class='dul-quick-links' href='#' data-dul-action='$action' data-dul-user-id='$user_object->ID'>" . $label . '</a>';
+			$nonce = wp_create_nonce( sprintf( 'ssdul_enable_disable_user_%s', $user_object->ID ) );
+			$actions[ 'disable_user_login' ] = "<a class='dul-quick-links' href='#' data-dul-action='$action' data-dul-nonce='$nonce' data-dul-user-id='$user_object->ID'>" . $label . '</a>';
 		}
 		return $actions;
 	}
@@ -321,7 +322,7 @@ final class SS_Disable_User_Login_Plugin {
 	 */
 	public function enable_disable_user() {
 
-		check_ajax_referer( 'ssdul_quick_links', 'nonce' );
+		// check_ajax_referer( 'ssdul_quick_links', 'nonce' );
 
 		if ( empty( $_POST['data'] ) ) return;
 
@@ -330,6 +331,8 @@ final class SS_Disable_User_Login_Plugin {
 		$user_id = $data['user_id'];
 
 		$action = $data['action'];
+
+		check_ajax_referer( sprintf( 'ssdul_enable_disable_user_%s', $user_id ), 'nonce' );
 
 		if ( ! $this->can_disable( $user_id ) ) {
 			$response = array(
