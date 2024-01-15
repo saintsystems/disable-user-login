@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.8';
+	private static $version = '1.3.9';
 
 	/**
 	 * Plugin singleton instance
@@ -449,6 +449,9 @@ final class SS_Disable_User_Login_Plugin {
 	 * @since 1.0.6
 	 */
 	public function handle_bulk_disable_users( $redirect_to, $doaction, $user_ids ) {
+
+		check_admin_referer( 'bulk-users', '_dulnonce' );
+
 		if ( $doaction !== 'disable_user_login' && $doaction !== 'enable_user_login' ) {
 			return $redirect_to;
 		}

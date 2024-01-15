@@ -6,6 +6,20 @@
 		init: function() {
 			$( document )
 				.on( 'click', 'a.dul-quick-links', SS_DUL.toggleDisabled )
+				.on( 'ready', SS_DUL.copyNonce )
+		},
+
+		/**
+		 * Clone the nonce field
+		 * @param {*} e
+		 */
+		copyNonce: function( e ) {
+			if ($('input#_dulnonce').length == 0 && $('input#_wpnonce').length == 1) {
+				let $nonce = $('input#_wpnonce');
+				let $form = $nonce.parent();
+				let $newnonce = $nonce.clone().attr('id','_dulnonce').attr('name','_dulnonce');
+				$form.append($newnonce);
+			}
 		},
 
 		/**
