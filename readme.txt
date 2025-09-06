@@ -5,8 +5,8 @@ Tags: users, user, login, account, disable
 Requires at least: 4.7.0
 Tested up to: 6.6.1
 Requires PHP: 5.6
-Stable tag: 1.3.10
-Version: 1.3.10
+Stable tag: 1.3.11
+Version: 1.3.11
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -40,7 +40,10 @@ This can be useful in a few situations.
 
 = Can I change the message a disabled user sees? =
 
-Yes, there is a filter in place for that, `disable_user_login.disabled_message`.
+Yes! You can customize the disabled user message in two ways:
+
+1. **Admin Panel (Easy)**: Go to Settings > Disable User Login in your WordPress admin to customize the message via a user-friendly interface.
+2. **Filter Hook (Advanced)**: Use the `disable_user_login.disabled_message` filter in your theme or plugin code for programmatic customization.
 
 == Screenshots ==
 
@@ -48,6 +51,10 @@ Yes, there is a filter in place for that, `disable_user_login.disabled_message`.
 2. Message when a disabled user tries to login.
 
 == Changelog ==
+
+= 1.3.11 =
+* Add custom message settings page - users can now customize the disabled account message via the WordPress admin panel (Settings > Disable User Login).
+* Maintain backward compatibility with existing filter hooks.
 
 = 1.3.10 =
 * Bump tested WP version.

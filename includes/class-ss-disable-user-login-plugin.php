@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.10';
+	private static $version = '1.3.11';
 
 	/**
 	 * Plugin singleton instance
@@ -123,6 +123,10 @@ final class SS_Disable_User_Login_Plugin {
 			add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
 			add_action( 'admin_enqueue_scripts',      array( $this, 'enqueue_scripts'             )        );
 			add_action( 'wp_ajax_ssdul_enable_disable_user', array( $this, 'enable_disable_user'  )        );
+			
+			// Settings
+			add_action( 'admin_menu',                 array( $this, 'add_admin_menu'              )        );
+			add_action( 'admin_init',                 array( $this, 'settings_init'               )        );
 		}
 
 		if ( is_network_admin() ) {
@@ -384,7 +388,7 @@ final class SS_Disable_User_Login_Plugin {
 				 */
 				do_action( 'disable_user_login.disabled_login_attempt', $user );
 
-				return new WP_Error( 'disable_user_login_user_disabled', apply_filters( 'disable_user_login.disabled_message', __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' ) ) );
+				return new WP_Error( 'disable_user_login_user_disabled', apply_filters( 'disable_user_login.disabled_message', $this->get_disabled_message() ) );
 			}
 		}
 
@@ -611,5 +615,144 @@ final class SS_Disable_User_Login_Plugin {
 		wp_enqueue_script( 'disable-user-login-admin' );
 
 	} //end function scripts
+
+	/**
+	 * Add admin menu for plugin settings
+	 *
+	 * @since 1.3.11
+	 */
+	public function add_admin_menu() {
+		add_options_page(
+			__( 'Disable User Login Settings', 'disable-user-login' ),
+			__( 'Disable User Login', 'disable-user-login' ),
+			'manage_options',
+			'disable-user-login',
+			array( $this, 'options_page' )
+		);
+	}
+
+	/**
+	 * Initialize plugin settings
+	 *
+	 * @since 1.3.11
+	 */
+	public function settings_init() {
+		register_setting( 'disable_user_login', 'disable_user_login_settings' );
+
+		add_settings_section(
+			'disable_user_login_section',
+			__( 'Disabled User Message Settings', 'disable-user-login' ),
+			array( $this, 'settings_section_callback' ),
+			'disable_user_login'
+		);
+
+		add_settings_field(
+			'disabled_message',
+			__( 'Custom Disabled Message', 'disable-user-login' ),
+			array( $this, 'disabled_message_render' ),
+			'disable_user_login',
+			'disable_user_login_section'
+		);
+	}
+
+	/**
+	 * Settings section description
+	 *
+	 * @since 1.3.11
+	 */
+	public function settings_section_callback() {
+		echo __( 'Customize the message shown to users when their account is disabled.', 'disable-user-login' );
+	}
+
+	/**
+	 * Render the disabled message input field
+	 *
+	 * @since 1.3.11
+	 */
+	public function disabled_message_render() {
+		$options = get_option( 'disable_user_login_settings' );
+		$default_message = __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' );
+		$current_message = isset( $options['disabled_message'] ) ? $options['disabled_message'] : '';
+		?>
+		<textarea cols="50" rows="3" id="disabled_message_textarea" name="disable_user_login_settings[disabled_message]" placeholder="<?php echo esc_attr( $default_message ); ?>"><?php echo esc_textarea( $current_message ); ?></textarea>
+		<p class="description">
+			<?php _e( 'Enter the message to display when disabled users try to login. HTML is allowed. Leave empty to use the default message.', 'disable-user-login' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render the options page
+	 *
+	 * @since 1.3.11
+	 */
+	public function options_page() {
+		$options = get_option( 'disable_user_login_settings' );
+		$default_message = __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' );
+		$current_message = isset( $options['disabled_message'] ) ? $options['disabled_message'] : '';
+		?>
+		<form action="options.php" method="post">
+			<h1><?php echo __( 'Disable User Login Settings', 'disable-user-login' ); ?></h1>
+			<?php
+			settings_fields( 'disable_user_login' );
+			do_settings_sections( 'disable_user_login' );
+			submit_button();
+			?>
+		</form>
+		
+		<hr>
+		
+		<h2><?php _e( 'Preview', 'disable-user-login' ); ?></h2>
+		<p><?php _e( 'This is how the error message would appear on the login page:', 'disable-user-login' ); ?></p>
+		
+		<div id="message-preview" style="border-left: 4px solid #dc3232; background: #fff; border-left: 4px solid #dc3232; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
+			<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
+				<span id="preview-content"><?php echo !empty($current_message) ? wp_kses_post($current_message) : $default_message; ?></span>
+			</p>
+		</div>
+		
+		<h3><?php _e( 'Default Message (when field is empty):', 'disable-user-login' ); ?></h3>
+		<div style="border-left: 4px solid #dc3232; background: #fff; border-left: 4px solid #dc3232; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
+			<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
+				<?php echo $default_message; ?>
+			</p>
+		</div>
+		
+		<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			var textarea = document.getElementById('disabled_message_textarea');
+			var preview = document.getElementById('preview-content');
+			var defaultMessage = <?php echo json_encode($default_message); ?>;
+			
+			// Update preview on textarea input
+			textarea.addEventListener('input', function() {
+				var value = this.value.trim();
+				if (value === '') {
+					preview.innerHTML = defaultMessage;
+				} else {
+					preview.innerHTML = value;
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Get the custom disabled message from settings
+	 *
+	 * @since 1.3.11
+	 * @return string The custom disabled message or default if not set
+	 */
+	private function get_disabled_message() {
+		$options = get_option( 'disable_user_login_settings' );
+		$default_message = __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' );
+		
+		if ( isset( $options['disabled_message'] ) && ! empty( trim( $options['disabled_message'] ) ) ) {
+			return wp_kses_post( $options['disabled_message'] );
+		}
+		
+		return $default_message;
+	}
 
 } //end class SS_Disable_User_Login_Plugin
