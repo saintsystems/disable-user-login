@@ -421,7 +421,7 @@ final class SS_Disable_User_Login_Plugin {
 	public function manage_users_column_content( $output, $column_name, $user_id ) {
 
 		if ( $column_name == 'disable_user_login' ) {
-			if ( get_the_author_meta( self::$user_meta_key, $user_id ) == 1 ) {
+			if ( $this->is_user_disabled( $user_id ) ) {
 				return __( 'Disabled', 'disable-user-login' );
 			}
 		}
