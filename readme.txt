@@ -3,10 +3,10 @@ Contributors: saintsystems, anderly
 Donate link: https://ssms.us/donate
 Tags: users, user, login, account, disable
 Requires at least: 4.7.0
-Tested up to: 6.6.1
+Tested up to: 6.8.2
 Requires PHP: 5.6
-Stable tag: 1.3.11
-Version: 1.3.11
+Stable tag: 1.3.12
+Version: 1.3.12
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -51,6 +51,10 @@ Yes! You can customize the disabled user message in two ways:
 2. Message when a disabled user tries to login.
 
 == Changelog ==
+
+= 1.3.12 =
+* Fix inconsistent user meta retrieval #15
+* Bump tested up to WP 6.8.2
 
 = 1.3.11 =
 * Add custom message settings page - users can now customize the disabled account message via the WordPress admin panel (Settings > Disable User Login).

@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.11';
+	private static $version = '1.3.12';
 
 	/**
 	 * Plugin singleton instance
@@ -123,7 +123,7 @@ final class SS_Disable_User_Login_Plugin {
 			add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
 			add_action( 'admin_enqueue_scripts',      array( $this, 'enqueue_scripts'             )        );
 			add_action( 'wp_ajax_ssdul_enable_disable_user', array( $this, 'enable_disable_user'  )        );
-			
+
 			// Settings
 			add_action( 'admin_menu',                 array( $this, 'add_admin_menu'              )        );
 			add_action( 'admin_init',                 array( $this, 'settings_init'               )        );
@@ -699,31 +699,31 @@ final class SS_Disable_User_Login_Plugin {
 			submit_button();
 			?>
 		</form>
-		
+
 		<hr>
-		
+
 		<h2><?php _e( 'Preview', 'disable-user-login' ); ?></h2>
 		<p><?php _e( 'This is how the error message would appear on the login page:', 'disable-user-login' ); ?></p>
-		
+
 		<div id="message-preview" style="border-left: 4px solid #dc3232; background: #fff; border-left: 4px solid #dc3232; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
 			<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
 				<span id="preview-content"><?php echo !empty($current_message) ? wp_kses_post($current_message) : $default_message; ?></span>
 			</p>
 		</div>
-		
+
 		<h3><?php _e( 'Default Message (when field is empty):', 'disable-user-login' ); ?></h3>
 		<div style="border-left: 4px solid #dc3232; background: #fff; border-left: 4px solid #dc3232; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
 			<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
 				<?php echo $default_message; ?>
 			</p>
 		</div>
-		
+
 		<script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function() {
 			var textarea = document.getElementById('disabled_message_textarea');
 			var preview = document.getElementById('preview-content');
 			var defaultMessage = <?php echo json_encode($default_message); ?>;
-			
+
 			// Update preview on textarea input
 			textarea.addEventListener('input', function() {
 				var value = this.value.trim();
@@ -747,11 +747,11 @@ final class SS_Disable_User_Login_Plugin {
 	private function get_disabled_message() {
 		$options = get_option( 'disable_user_login_settings' );
 		$default_message = __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' );
-		
+
 		if ( isset( $options['disabled_message'] ) && ! empty( trim( $options['disabled_message'] ) ) ) {
 			return wp_kses_post( $options['disabled_message'] );
 		}
-		
+
 		return $default_message;
 	}
 
