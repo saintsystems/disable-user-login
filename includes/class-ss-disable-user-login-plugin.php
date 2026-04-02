@@ -440,7 +440,7 @@ final class SS_Disable_User_Login_Plugin {
 	 * @since 1.0.0
  	 */
 	public function manage_users_css() {
-		echo '<style type="text/css">.column-disable_user_login { width: 80px; }</style>';
+		echo '<style type="text/css">.column-disable_user_login { width: 100px; }</style>';
 	}
 
 	/**
