@@ -28,11 +28,12 @@ This can be useful in a few situations.
 
 = Upgrade to Pro =
 
-[Disable User Login Pro](https://www.saintsystems.com/products/disable-user-login-pro/) adds powerful bulk management tools:
+[Disable User Login Pro](https://www.saintsystems.com/products/disable-user-login-pro/) adds powerful tools for managing user accounts at scale:
 
-- **CSV Export** — download all users with their current enabled/disabled status
-- **CSV Import** — upload a CSV to bulk enable or disable hundreds of user accounts at once
-- **Workflow** — export users, update the "Enabled" column in a spreadsheet, and re-import to apply changes in bulk
+- **CSV Import & Export** — bulk enable or disable hundreds of users at once via spreadsheet
+- **Email Notifications** — automatically notify users when their account is disabled or re-enabled, with customizable email templates, merge tags, and optional admin CC
+- **Audit Log** — full history of every disable/enable action with timestamps, who performed it, and why
+- **Filterable User List** — "Disabled" and "Enabled" filter views on the Users screen with count badges and a sortable Disabled column
 
 Perfect for membership sites, nonprofits managing volunteers, agencies onboarding/offboarding clients, and universities managing student accounts.
 

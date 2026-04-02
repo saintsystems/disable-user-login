@@ -823,11 +823,13 @@ final class SS_Disable_User_Login_Plugin {
 			</div>
 			<div class="card" style="flex: 0 0 300px; margin-top: 0;">
 				<h2 style="margin-top: 0;"><?php _e( 'Disable User Login Pro', 'disable-user-login' ); ?></h2>
-				<p><?php _e( 'Manage users at scale with bulk CSV import/export.', 'disable-user-login' ); ?></p>
+				<p><?php _e( 'Powerful tools for managing user accounts at scale.', 'disable-user-login' ); ?></p>
 				<ul style="list-style: disc; padding-left: 20px;">
-					<li><?php _e( 'Export all users with enabled/disabled status', 'disable-user-login' ); ?></li>
-					<li><?php _e( 'Import CSV to bulk enable/disable users', 'disable-user-login' ); ?></li>
-					<li><?php _e( 'Automatic updates and priority support', 'disable-user-login' ); ?></li>
+					<li><?php _e( 'CSV import & export', 'disable-user-login' ); ?></li>
+					<li><?php _e( 'Email notifications on disable/enable', 'disable-user-login' ); ?></li>
+					<li><?php _e( 'Full audit log with timestamps', 'disable-user-login' ); ?></li>
+					<li><?php _e( 'Filterable & sortable user list', 'disable-user-login' ); ?></li>
+					<li><?php _e( 'Automatic updates & priority support', 'disable-user-login' ); ?></li>
 				</ul>
 				<p>
 					<a href="<?php echo esc_url( $pro_url ); ?>" class="button button-primary" target="_blank">
