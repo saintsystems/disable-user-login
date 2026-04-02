@@ -5,8 +5,8 @@ Tags: users, user, login, account, disable
 Requires at least: 6.2
 Tested up to: 6.8.2
 Requires PHP: 7.4
-Stable tag: 2.0.0
-Version: 2.0.0
+Stable tag: 2.1.0
+Version: 2.1.0
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -71,6 +71,10 @@ Priority support is available for [Disable User Login Pro](https://www.saintsyst
 4. Disable User Login Pro — Import CSV to bulk enable or disable users.
 
 == Changelog ==
+
+#### 2.1.0 - Apr 2, 2026
+- Feature: add pro upsell on plugin row, settings page, and readme
+- Feature: add tabbed settings page with hooks for pro plugin
 
 #### 2.0.0 - Apr 2, 2026
 - Minimum requirements raised from PHP 5.6 to 7.4 and WordPress 4.7 to 6.2.
