@@ -66,10 +66,12 @@ Priority support is available for [Disable User Login Pro](https://www.saintsyst
 
 == Screenshots ==
 
-1. User profile setting available to administrators.
-2. Message when a disabled user tries to login.
-3. Disable User Login Pro — Export users to CSV with enabled/disabled status.
-4. Disable User Login Pro — Import CSV to bulk enable or disable users.
+1. Disable User Login Pro — Filterable "Disabled" and "Enabled" views on the Users screen with count badges and sortable column.
+2. Message shown to disabled users when they try to login.
+3. Disable User Login Pro — Export all users to CSV with enabled/disabled status.
+4. Disable User Login Pro — Import CSV to bulk enable or disable user accounts.
+5. Disable User Login Pro — Customizable email notifications for disable/enable events with merge tags.
+6. Disable User Login Pro — Audit log with timestamps, performer, reason, source, and CSV export.
 
 == Changelog ==
 
