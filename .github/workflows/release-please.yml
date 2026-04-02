@@ -1,0 +1,177 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Update readme.txt changelog on the release PR branch.
+      - name: Checkout release PR branch
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update readme.txt changelog on release PR
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        shell: bash
+        run: |
+          TITLE="${{ fromJSON(steps.release.outputs.pr).title }}"
+          BRANCH="${{ fromJSON(steps.release.outputs.pr).headBranchName }}"
+
+          # Extract version from PR title (e.g. "chore(master): release 1.4.0")
+          VERSION=$(echo "$TITLE" | grep -oP '\d+\.\d+\.\d+')
+          if [ -z "$VERSION" ]; then
+            echo "Could not extract version from PR title: $TITLE"
+            exit 0
+          fi
+
+          echo "Syncing changelog for version $VERSION on branch $BRANCH"
+
+          # Check if this version already exists in readme.txt changelog
+          if grep -q "^#### $VERSION " readme.txt; then
+            echo "Changelog for $VERSION already exists in readme.txt, skipping."
+            exit 0
+          fi
+
+          # Extract changelog section from CHANGELOG.md for this version.
+          ESCAPED_VERSION=$(echo "$VERSION" | sed 's/\./\\./g')
+          SECTION=$(sed -n "/^## \[${ESCAPED_VERSION}\]/,/^## \[/p" CHANGELOG.md | sed '1d;$d')
+
+          if [ -z "$SECTION" ]; then
+            echo "No changelog section found for $VERSION in CHANGELOG.md"
+            exit 0
+          fi
+
+          # Parse section headers and prefix bullet lines with Feature:/Fix:.
+          PREFIX=""
+          CHANGELOG_ENTRY=""
+          while IFS= read -r line; do
+            if echo "$line" | grep -q '^### Features'; then
+              PREFIX="Feature: "
+            elif echo "$line" | grep -q '^### Bug Fixes'; then
+              PREFIX="Fix: "
+            elif echo "$line" | grep -q '^### '; then
+              PREFIX=""
+            elif echo "$line" | grep -q '^\* '; then
+              clean=$(echo "$line" | sed 's/ *(\[[#a-f0-9]*\]([^)]*))//g' | sed 's/^\* //')
+              CHANGELOG_ENTRY="${CHANGELOG_ENTRY}- ${PREFIX}${clean}"$'\n'
+            fi
+          done <<< "$SECTION"
+
+          if [ -z "$CHANGELOG_ENTRY" ]; then
+            echo "No changelog entries found for $VERSION in CHANGELOG.md"
+            exit 0
+          fi
+
+          echo "Changelog entries:"
+          echo "$CHANGELOG_ENTRY"
+
+          # Get today's date for the header
+          TODAY=$(date +"%b %-d, %Y")
+
+          # Write new changelog entry to temp file matching existing format
+          printf '#### %s - %s\n%s' "$VERSION" "$TODAY" "$CHANGELOG_ENTRY" > /tmp/new_entry.txt
+
+          # Insert after the == Changelog == line
+          awk '/^== Changelog ==/ {print; print ""; system("cat /tmp/new_entry.txt"); next} 1' readme.txt > readme.txt.tmp
+          mv readme.txt.tmp readme.txt
+          rm /tmp/new_entry.txt
+
+          # Update Stable tag and Version in readme.txt header
+          sed -i "s/^Stable tag: .*/Stable tag: $VERSION/" readme.txt
+          sed -i "s/^Version: .*/Version: $VERSION/" readme.txt
+
+          # Commit and push the change
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add readme.txt
+          git diff --staged --quiet || git commit -m "chore: sync readme.txt version and changelog for v$VERSION"
+          git push
+
+      # --- Release created: build zip, upload to GitHub, deploy to WordPress.org SVN ---
+
+      - name: Checkout code
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Build plugin zip
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          mkdir -p /tmp/disable-user-login
+          rsync -av --exclude-from=.distignore ./ /tmp/disable-user-login/
+          cd /tmp
+          zip -r disable-user-login.zip disable-user-login/
+          mv disable-user-login.zip $GITHUB_WORKSPACE/
+
+      - name: Upload Release Asset
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ steps.release.outputs.tag_name }} disable-user-login.zip
+
+      - name: Install SVN
+        if: ${{ steps.release.outputs.release_created }}
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
+      - name: Deploy to WordPress.org SVN
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          VERSION="${{ steps.release.outputs.tag_name }}"
+          # Strip leading 'v' if present
+          VERSION="${VERSION#v}"
+          PLUGIN_SLUG="disable-user-login"
+          SVN_REPO="https://plugins.svn.wordpress.org/${PLUGIN_SLUG}"
+
+          echo "Deploying ${PLUGIN_SLUG} v${VERSION} to WordPress.org SVN..."
+
+          # Checkout the full SVN repo (trunk + tags)
+          svn checkout "${SVN_REPO}" /tmp/svn-repo
+
+          # Replace trunk contents with built plugin files
+          rm -rf /tmp/svn-repo/trunk
+          cp -R /tmp/disable-user-login /tmp/svn-repo/trunk
+
+          cd /tmp/svn-repo
+
+          # Add new files
+          svn add --force * --auto-props --parents --depth infinity -q
+
+          # Remove deleted files
+          MISSING_PATHS=$(svn status | sed -e '/^!/!d' -e 's/^!//')
+          for MISSING_PATH in $MISSING_PATHS; do
+            svn rm --force "$MISSING_PATH"
+          done
+
+          # Copy trunk to tag (local working copy operation)
+          svn copy trunk "tags/${VERSION}"
+
+          # Single commit: trunk update + tag creation
+          svn commit \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache \
+            -m "Release ${VERSION}, see readme.txt for the changelog."
+
+          echo "Successfully deployed v${VERSION} to WordPress.org"

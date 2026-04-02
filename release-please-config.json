@@ -1,0 +1,20 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "disable-user-login",
+      "include-component-in-tag": false,
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "disable-user-login.php"
+        },
+        {
+          "type": "generic",
+          "path": "includes/class-ss-disable-user-login-plugin.php"
+        }
+      ]
+    }
+  }
+}
