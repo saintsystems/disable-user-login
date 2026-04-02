@@ -118,7 +118,8 @@ final class SS_Disable_User_Login_Plugin {
 			add_action( 'edit_user_profile',          array( $this, 'add_disabled_field'          )        );
 			add_action( 'personal_options_update',    array( $this, 'save_disabled_field'         )        );
 			add_action( 'edit_user_profile_update',   array( $this, 'save_disabled_field'         )        );
-			add_filter( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 10, 3 );
+			add_filter( 'manage_users_custom_column', array( $this, 'manage_users_column_content' ), 99, 3 );
+			add_filter( 'wpmu_users_custom_column',   array( $this, 'manage_users_column_content' ), 99, 3 );
 			add_action( 'admin_footer-users.php',	  array( $this, 'manage_users_css'            )        );
 			add_action( 'admin_notices',              array( $this, 'bulk_disable_user_notices'   )        );
 			add_action( 'admin_enqueue_scripts',      array( $this, 'enqueue_scripts'             )        );
