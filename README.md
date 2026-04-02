@@ -1,6 +1,6 @@
 Disable User Login
 ======================
-[![Build Status](https://img.shields.io/travis/saintsystems/disable-user-login/master.svg?style=flat-square)](https://travis-ci.org/saintsystems/disable-user-login)
+[![CI](https://github.com/saintsystems/disable-user-login/actions/workflows/ci.yml/badge.svg)](https://github.com/saintsystems/disable-user-login/actions/workflows/ci.yml)
 [![WordPress tested](https://img.shields.io/wordpress/v/disable-user-login.svg?style=flat-square)](https://wordpress.org/plugins/disable-user-login/)
 [![WordPress Plugin version](https://img.shields.io/wordpress/plugin/v/disable-user-login.svg?style=flat-square)](https://wordpress.org/plugins/disable-user-login/)
 [![WordPress Plugin Downloads](https://img.shields.io/wordpress/plugin/dt/disable-user-login.svg?style=flat-square)](https://wordpress.org/plugins/disable-user-login/)
