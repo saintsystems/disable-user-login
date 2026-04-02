@@ -127,6 +127,10 @@ final class SS_Disable_User_Login_Plugin {
 			// Settings
 			add_action( 'admin_menu',                 array( $this, 'add_admin_menu'              )        );
 			add_action( 'admin_init',                 array( $this, 'settings_init'               )        );
+
+			// Plugin links
+			add_filter( 'plugin_action_links_' . plugin_basename( SS_DISABLE_USER_LOGIN_FILE ), array( $this, 'action_links' ) );
+			add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 		}
 
 		if ( is_network_admin() ) {
@@ -617,6 +621,41 @@ final class SS_Disable_User_Login_Plugin {
 	} //end function scripts
 
 	/**
+	 * Add Settings link to the plugin action links on the Plugins page.
+	 *
+	 * @param array $links
+	 * @return array
+	 */
+	public function action_links( $links ) {
+		$settings_link = '<a href="' . admin_url( 'options-general.php?page=disable-user-login' ) . '">' . __( 'Settings', 'disable-user-login' ) . '</a>';
+		array_unshift( $links, $settings_link );
+		return $links;
+	}
+
+	/**
+	 * Add row meta links on the Plugins page.
+	 *
+	 * @param array  $links
+	 * @param string $file
+	 * @return array
+	 */
+	public static function plugin_row_meta( $links, $file ) {
+		if ( plugin_basename( SS_DISABLE_USER_LOGIN_FILE ) === $file ) {
+			$row_meta = array(
+				'docs' => '<a href="https://wordpress.org/support/plugin/disable-user-login" target="_blank">' . esc_html__( 'Support', 'disable-user-login' ) . '</a>',
+			);
+
+			if ( ! function_exists( 'SSDULPRO' ) ) {
+				$row_meta['upgrade'] = '<a href="https://www.saintsystems.com/products/disable-user-login-pro/?utm_source=wp-plugin&utm_medium=disable-user-login&utm_campaign=plugins-upgrade-link" aria-label="' . esc_attr__( 'Upgrade to Disable User Login Pro', 'disable-user-login' ) . '" target="_blank" style="color: #0a7b30; font-weight: 600;">' . esc_html__( 'Upgrade to Pro', 'disable-user-login' ) . '</a>';
+			}
+
+			return array_merge( $links, $row_meta );
+		}
+
+		return $links;
+	}
+
+	/**
 	 * Add admin menu for plugin settings
 	 *
 	 * @since 1.3.11
@@ -704,6 +743,8 @@ final class SS_Disable_User_Login_Plugin {
 		 * @param array $tabs Associative array of tab slug => label.
 		 */
 		$tabs = apply_filters( 'disable_user_login.settings_tabs', $tabs );
+		$show_pro_upsell = ! function_exists( 'SSDULPRO' ) && $current_tab === 'general';
+		$pro_url = 'https://www.saintsystems.com/products/disable-user-login-pro/?utm_source=wp-plugin&utm_medium=disable-user-login&utm_campaign=settings-page';
 		?>
 		<div class="wrap">
 			<h1><?php echo esc_html__( 'Disable User Login Settings', 'disable-user-login' ); ?></h1>
@@ -717,6 +758,11 @@ final class SS_Disable_User_Login_Plugin {
 					</a>
 				<?php endforeach; ?>
 			</nav>
+			<?php endif; ?>
+
+			<?php if ( $show_pro_upsell ) : ?>
+			<div style="display: flex; gap: 20px; align-items: flex-start; margin-top: 20px;">
+			<div style="flex: 1; min-width: 0;">
 			<?php endif; ?>
 
 			<?php if ( $current_tab === 'general' ) : ?>
@@ -770,6 +816,25 @@ final class SS_Disable_User_Login_Plugin {
 				do_action( 'disable_user_login.settings_tab_content', $current_tab );
 				?>
 
+			<?php endif; ?>
+
+			<?php if ( $show_pro_upsell ) : ?>
+			</div>
+			<div class="card" style="flex: 0 0 300px; margin-top: 0;">
+				<h2 style="margin-top: 0;"><?php _e( 'Disable User Login Pro', 'disable-user-login' ); ?></h2>
+				<p><?php _e( 'Manage users at scale with bulk CSV import/export.', 'disable-user-login' ); ?></p>
+				<ul style="list-style: disc; padding-left: 20px;">
+					<li><?php _e( 'Export all users with enabled/disabled status', 'disable-user-login' ); ?></li>
+					<li><?php _e( 'Import CSV to bulk enable/disable users', 'disable-user-login' ); ?></li>
+					<li><?php _e( 'Automatic updates and priority support', 'disable-user-login' ); ?></li>
+				</ul>
+				<p>
+					<a href="<?php echo esc_url( $pro_url ); ?>" class="button button-primary" target="_blank">
+						<?php _e( 'Upgrade to Pro', 'disable-user-login' ); ?>
+					</a>
+				</p>
+			</div>
+			</div>
 			<?php endif; ?>
 		</div>
 		<?php
