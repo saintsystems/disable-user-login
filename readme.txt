@@ -5,8 +5,8 @@ Tags: users, user, login, account, disable
 Requires at least: 6.2
 Tested up to: 6.8.2
 Requires PHP: 7.4
-Stable tag: 2.1.1
-Version: 2.1.1
+Stable tag: 2.1.2
+Version: 2.1.2
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -72,6 +72,9 @@ Priority support is available for [Disable User Login Pro](https://www.saintsyst
 4. Disable User Login Pro — Import CSV to bulk enable or disable users.
 
 == Changelog ==
+
+#### 2.1.2 - Apr 2, 2026
+- Fix: widen Disabled column to prevent sort indicator wrapping
 
 #### 2.1.1 - Apr 2, 2026
 - Fix: bump column filter priority and add multisite column hook
