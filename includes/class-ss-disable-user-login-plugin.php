@@ -15,7 +15,7 @@ final class SS_Disable_User_Login_Plugin {
 	 *
 	 * @var string
 	 */
-	private static $version = '1.3.12';
+	private static $version = '1.3.12'; // x-release-please-version
 
 	/**
 	 * Plugin singleton instance
@@ -265,7 +265,7 @@ final class SS_Disable_User_Login_Plugin {
 						<label for="disable_user_login"><?php _e('Disable User Account', 'disable-user-login' ); ?></label>
 					</th>
 					<td>
-						<input type="checkbox" name="disable_user_login" id="disable_user_login" value="1" <?php checked( 1, get_the_author_meta( self::$user_meta_key, $user->ID ) ); ?> />
+						<input type="checkbox" name="disable_user_login" id="disable_user_login" value="1" <?php checked( $this->is_user_disabled( $user->ID ) ); ?> />
                         <label for="disable_user_login"><span class="description"><?php _e( 'If checked, the user cannot login with this account.' , 'disable-user-login' ); ?></span></label>
 					</td>
 				</tr>
@@ -481,11 +481,11 @@ final class SS_Disable_User_Login_Plugin {
 		}
 
 		if ( $disabled ) {
-			$redirect_to = add_query_arg( 'disable_user_login', $affected_user_count, $redirect_to );
-			$redirect_to = remove_query_arg( 'disable_user_login', $redirect_to );
+			$redirect_to = add_query_arg( 'disabled_user_login', $affected_user_count, $redirect_to );
+			$redirect_to = remove_query_arg( 'enabled_user_login', $redirect_to );
 		} else {
-			$redirect_to = add_query_arg( 'disable_user_login',  $affected_user_count, $redirect_to );
-			$redirect_to = remove_query_arg( 'disable_user_login', $redirect_to );
+			$redirect_to = add_query_arg( 'enabled_user_login', $affected_user_count, $redirect_to );
+			$redirect_to = remove_query_arg( 'disabled_user_login', $redirect_to );
 		}
 		return $redirect_to;
 	}
@@ -495,8 +495,8 @@ final class SS_Disable_User_Login_Plugin {
 	 * @since 1.0.6
 	 */
 	public function bulk_disable_user_notices() {
-		if ( ! empty( $_REQUEST['disable_user_login'] ) ){
-			$updated = intval( $_REQUEST['disable_user_login'] );
+		if ( ! empty( $_REQUEST['enabled_user_login'] ) ) {
+			$updated = intval( $_REQUEST['enabled_user_login'] );
 			printf( '<div id="message" class="updated">' .
 				_n( 'Enabled %s user.',
 					'Enabled %s users.',
@@ -505,8 +505,8 @@ final class SS_Disable_User_Login_Plugin {
 				) . '</div>', $updated );
 		}
 
-		if ( ! empty( $_REQUEST['disable_user_login'] ) ){
-			$updated = intval( $_REQUEST['disable_user_login'] );
+		if ( ! empty( $_REQUEST['disabled_user_login'] ) ) {
+			$updated = intval( $_REQUEST['disabled_user_login'] );
 			printf( '<div id="message" class="updated">' .
 				_n( 'Disabled %s user.',
 					'Disabled %s users.',
