@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/saintsystems/disable-user-login/compare/v2.1.0...v2.1.1) (2026-04-02)
+
+
+### Bug Fixes
+
+* bump column filter priority and add multisite column hook ([#15](https://github.com/saintsystems/disable-user-login/issues/15)) ([43ee3e5](https://github.com/saintsystems/disable-user-login/commit/43ee3e53a7b5a727a7cf35a7ef00a7cc5a63bf15))
+
 ## [2.1.0](https://github.com/saintsystems/disable-user-login/compare/v2.0.0...v2.1.0) (2026-04-02)
 
 
