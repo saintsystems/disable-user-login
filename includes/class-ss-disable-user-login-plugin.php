@@ -690,51 +690,88 @@ final class SS_Disable_User_Login_Plugin {
 		$options = get_option( 'disable_user_login_settings' );
 		$default_message = __( '<strong>ERROR</strong>: Account disabled.', 'disable-user-login' );
 		$current_message = isset( $options['disabled_message'] ) ? $options['disabled_message'] : '';
+
+		$current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
+
+		$tabs = array(
+			'general' => __( 'General', 'disable-user-login' ),
+		);
+
+		/**
+		 * Filter the settings page tabs.
+		 *
+		 * @since 2.0.0
+		 * @param array $tabs Associative array of tab slug => label.
+		 */
+		$tabs = apply_filters( 'disable_user_login.settings_tabs', $tabs );
 		?>
-		<form action="options.php" method="post">
-			<h1><?php echo __( 'Disable User Login Settings', 'disable-user-login' ); ?></h1>
-			<?php
-			settings_fields( 'disable_user_login' );
-			do_settings_sections( 'disable_user_login' );
-			submit_button();
-			?>
-		</form>
+		<div class="wrap">
+			<h1><?php echo esc_html__( 'Disable User Login Settings', 'disable-user-login' ); ?></h1>
 
-		<hr>
+			<?php if ( count( $tabs ) > 1 ) : ?>
+			<nav class="nav-tab-wrapper">
+				<?php foreach ( $tabs as $tab_slug => $tab_label ) : ?>
+					<a href="<?php echo esc_url( admin_url( 'options-general.php?page=disable-user-login&tab=' . $tab_slug ) ); ?>"
+					   class="nav-tab <?php echo ( $current_tab === $tab_slug ) ? 'nav-tab-active' : ''; ?>">
+						<?php echo esc_html( $tab_label ); ?>
+					</a>
+				<?php endforeach; ?>
+			</nav>
+			<?php endif; ?>
 
-		<h2><?php _e( 'Preview', 'disable-user-login' ); ?></h2>
-		<p><?php _e( 'This is how the error message would appear on the login page:', 'disable-user-login' ); ?></p>
+			<?php if ( $current_tab === 'general' ) : ?>
+			<form action="options.php" method="post">
+				<?php
+				settings_fields( 'disable_user_login' );
+				do_settings_sections( 'disable_user_login' );
+				submit_button();
+				?>
+			</form>
 
-		<div id="message-preview" style="border-left: 4px solid #dc3232; background: #fff; border-left: 4px solid #dc3232; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
-			<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
-				<span id="preview-content"><?php echo !empty($current_message) ? wp_kses_post($current_message) : $default_message; ?></span>
-			</p>
-		</div>
+			<hr>
 
-		<h3><?php _e( 'Default Message (when field is empty):', 'disable-user-login' ); ?></h3>
-		<div style="border-left: 4px solid #dc3232; background: #fff; border-left: 4px solid #dc3232; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
-			<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
-				<?php echo $default_message; ?>
-			</p>
-		</div>
+			<h2><?php _e( 'Preview', 'disable-user-login' ); ?></h2>
+			<p><?php _e( 'This is how the error message would appear on the login page:', 'disable-user-login' ); ?></p>
 
-		<script type="text/javascript">
-		document.addEventListener('DOMContentLoaded', function() {
-			var textarea = document.getElementById('disabled_message_textarea');
-			var preview = document.getElementById('preview-content');
-			var defaultMessage = <?php echo json_encode($default_message); ?>;
+			<div id="message-preview" style="border-left: 4px solid #dc3232; background: #fff; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
+				<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
+					<span id="preview-content"><?php echo ! empty( $current_message ) ? wp_kses_post( $current_message ) : $default_message; ?></span>
+				</p>
+			</div>
 
-			// Update preview on textarea input
-			textarea.addEventListener('input', function() {
-				var value = this.value.trim();
-				if (value === '') {
-					preview.innerHTML = defaultMessage;
-				} else {
-					preview.innerHTML = value;
-				}
+			<h3><?php _e( 'Default Message (when field is empty):', 'disable-user-login' ); ?></h3>
+			<div style="border-left: 4px solid #dc3232; background: #fff; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 5px 0 15px; padding: 1px 12px;">
+				<p style="margin: 0.5em 0; line-height: 1.5; color: #dc3232;">
+					<?php echo $default_message; ?>
+				</p>
+			</div>
+
+			<script type="text/javascript">
+			document.addEventListener('DOMContentLoaded', function() {
+				var textarea = document.getElementById('disabled_message_textarea');
+				var preview = document.getElementById('preview-content');
+				var defaultMessage = <?php echo json_encode( $default_message ); ?>;
+				textarea.addEventListener('input', function() {
+					var value = this.value.trim();
+					preview.innerHTML = value === '' ? defaultMessage : value;
+				});
 			});
-		});
-		</script>
+			</script>
+
+			<?php else : ?>
+
+				<?php
+				/**
+				 * Render content for custom settings tabs.
+				 *
+				 * @since 2.0.0
+				 * @param string $current_tab The current tab slug.
+				 */
+				do_action( 'disable_user_login.settings_tab_content', $current_tab );
+				?>
+
+			<?php endif; ?>
+		</div>
 		<?php
 	}
 
