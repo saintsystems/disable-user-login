@@ -5,8 +5,8 @@ Tags: users, user, login, account, disable
 Requires at least: 6.2
 Tested up to: 6.8.2
 Requires PHP: 7.4
-Stable tag: 1.3.12
-Version: 1.3.12
+Stable tag: 2.0.0
+Version: 2.0.0
 License: GPLv3
 
 Provides the ability to disable user accounts and prevent them from logging in.
@@ -51,6 +51,10 @@ Yes! You can customize the disabled user message in two ways:
 2. Message when a disabled user tries to login.
 
 == Changelog ==
+
+#### 2.0.0 - Apr 2, 2026
+- Minimum requirements raised from PHP 5.6 to 7.4 and WordPress 4.7 to 6.2.
+- Feature: add PHP 7.4+ and WP 6.2+ compatibility checks
 
 = 1.3.12 =
 * Fix inconsistent user meta retrieval #15
