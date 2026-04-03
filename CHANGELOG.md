@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.5](https://github.com/saintsystems/disable-user-login/compare/v2.1.4...v2.1.5) (2026-04-03)
+
+
+### Bug Fixes
+
+* update plugin description to be more descriptive ([87399c5](https://github.com/saintsystems/disable-user-login/commit/87399c5b091d7380155ef154a7223867a457bbc0))
+
 ## [2.1.4](https://github.com/saintsystems/disable-user-login/compare/v2.1.3...v2.1.4) (2026-04-03)
 
 
