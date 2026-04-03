@@ -3,7 +3,7 @@ Contributors: saintsystems, anderly
 Donate link: https://ssms.us/donate
 Tags: users, user, login, account, disable
 Requires at least: 6.2
-Tested up to: 6.8.2
+Tested up to: 6.9.4
 Requires PHP: 7.4
 Stable tag: 2.1.6
 Version: 2.1.6
