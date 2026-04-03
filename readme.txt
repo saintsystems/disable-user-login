@@ -9,7 +9,7 @@ Stable tag: 2.1.4
 Version: 2.1.4
 License: GPLv3
 
-Provides the ability to disable user accounts and prevent them from logging in.
+Disable user accounts without deleting them. One-click enable/disable from the user list, bulk actions, force logout, and customizable disabled message.
 
 == Description ==
 
