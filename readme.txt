@@ -9,7 +9,7 @@ Stable tag: 2.1.5
 Version: 2.1.5
 License: GPLv3
 
-Disable user accounts without deleting them. One-click enable/disable from the user list, bulk actions, force logout, and customizable disabled message.
+Disable user accounts without deleting them. One-click enable/disable, bulk actions, force logout, and customizable disabled message.
 
 == Description ==
 
