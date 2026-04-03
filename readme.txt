@@ -5,8 +5,8 @@ Tags: users, user, login, account, disable
 Requires at least: 6.2
 Tested up to: 6.9.4
 Requires PHP: 7.4
-Stable tag: 2.1.6
-Version: 2.1.6
+Stable tag: 2.1.7
+Version: 2.1.7
 License: GPLv3
 
 Disable user accounts without deleting them. One-click enable/disable, bulk actions, force logout, and customizable disabled message.
@@ -74,6 +74,9 @@ Priority support is available for [Disable User Login Pro](https://www.saintsyst
 6. Disable User Login Pro — Audit log with timestamps, performer, reason, source, and CSV export.
 
 == Changelog ==
+
+#### 2.1.7 - Apr 3, 2026
+- Fix: bump tested up to WordPress 6.9.4
 
 #### 2.1.6 - Apr 3, 2026
 - Fix: shorten plugin description to fit 150 character limit

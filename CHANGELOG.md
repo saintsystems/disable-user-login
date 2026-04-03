@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.7](https://github.com/saintsystems/disable-user-login/compare/v2.1.6...v2.1.7) (2026-04-03)
+
+
+### Bug Fixes
+
+* bump tested up to WordPress 6.9.4 ([70f16a1](https://github.com/saintsystems/disable-user-login/commit/70f16a14176482eb5ea22be8d5461f510fd16ccf))
+
 ## [2.1.6](https://github.com/saintsystems/disable-user-login/compare/v2.1.5...v2.1.6) (2026-04-03)
 
 
