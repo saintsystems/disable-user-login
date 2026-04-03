@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.4](https://github.com/saintsystems/disable-user-login/compare/v2.1.3...v2.1.4) (2026-04-03)
+
+
+### Bug Fixes
+
+* remove icon.svg so WordPress.org uses animated GIF icons ([f5a238e](https://github.com/saintsystems/disable-user-login/commit/f5a238e16fee9d7484e870bf1e47c62d73812434))
+
 ## [2.1.3](https://github.com/saintsystems/disable-user-login/compare/v2.1.2...v2.1.3) (2026-04-03)
 
 

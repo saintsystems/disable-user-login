@@ -4,7 +4,7 @@
  * Plugin URI:  http://wordpress.org/plugins/disable-user-login
  * Description: Provides the ability to disable user accounts and prevent them from logging in.
  * x-release-please-start-version
- * Version:     2.1.3
+ * Version:     2.1.4
  * x-release-please-end
  * Requires at least: 6.2
  * Requires PHP: 7.4
