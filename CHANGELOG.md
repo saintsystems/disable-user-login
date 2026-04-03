@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.6](https://github.com/saintsystems/disable-user-login/compare/v2.1.5...v2.1.6) (2026-04-03)
+
+
+### Bug Fixes
+
+* shorten plugin description to fit 150 character limit ([c8f0ce7](https://github.com/saintsystems/disable-user-login/commit/c8f0ce73e6a413314ec30da26bdcaf1466731405))
+
 ## [2.1.5](https://github.com/saintsystems/disable-user-login/compare/v2.1.4...v2.1.5) (2026-04-03)
 
 
