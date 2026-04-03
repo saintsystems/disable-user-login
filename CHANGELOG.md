@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.3](https://github.com/saintsystems/disable-user-login/compare/v2.1.2...v2.1.3) (2026-04-03)
+
+
+### Bug Fixes
+
+* update plugin banner and icon assets ([92270b7](https://github.com/saintsystems/disable-user-login/commit/92270b735759f0d02432c311c1b72b042af42876))
+
 ## [2.1.2](https://github.com/saintsystems/disable-user-login/compare/v2.1.1...v2.1.2) (2026-04-02)
 
 
