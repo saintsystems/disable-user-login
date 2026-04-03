@@ -156,6 +156,7 @@ jobs:
           mkdir -p /tmp/svn-repo/assets
           cp -f "$GITHUB_WORKSPACE"/assets/banner-*.png /tmp/svn-repo/assets/ 2>/dev/null || true
           cp -f "$GITHUB_WORKSPACE"/assets/icon-*.png /tmp/svn-repo/assets/ 2>/dev/null || true
+          cp -f "$GITHUB_WORKSPACE"/assets/icon-*.gif /tmp/svn-repo/assets/ 2>/dev/null || true
           cp -f "$GITHUB_WORKSPACE"/assets/icon.svg /tmp/svn-repo/assets/ 2>/dev/null || true
           cp -f "$GITHUB_WORKSPACE"/assets/banner.svg /tmp/svn-repo/assets/ 2>/dev/null || true
           cp -f "$GITHUB_WORKSPACE"/assets/screenshot-*.png /tmp/svn-repo/assets/ 2>/dev/null || true
